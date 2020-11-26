@@ -116,7 +116,9 @@ def login():
 
 @app.route('/user/create', methods = ['POST'])
 def create_user():
+    print("hello there")
     data = request.get_json()
+    print(data)
     names = mongo.db.user_profiles
     username = data["name"]
     password = data["password"]
@@ -127,4 +129,5 @@ def create_user():
     else:
         #add the stuff to it 
         names.insert_one({'username':username,"password":password,"description":description,"profile_picture":profile_picture, "nut_facts":[]})
+        return "added profile"
 app.run()
