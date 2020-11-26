@@ -81,6 +81,7 @@ def filter(args):
                 string = i.text
             ret.append(string.strip())
     return ret
+
 def call(argument):
     options = Options()
     options.add_argument('--headless')
@@ -109,9 +110,6 @@ def call(argument):
     #on the menu that we're looking for
     food = list(map(lambda x: x.get_attribute("href"), driver.find_elements_by_xpath("//a[contains(@href, 'label.aspx')]")))
     dictionary = {}
-    cur_date = date.today()
-    cur_date = cur_date.strftime("%m/%d/%y")
-    cur_date += argument["dining_hall"] + argument["meal_time"]
     for i in food:
         driver.get(i)
         all_nut_facts = driver.find_elements_by_xpath("//*[contains(@class,'nutfacts')]")
