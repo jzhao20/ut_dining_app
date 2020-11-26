@@ -46,11 +46,35 @@ def call_func():
 def user_profile():
     username = request.args["name"]
     names = mongo.db.user_profiles
-    if names.find_one({"username":username}) != None:
-        return names.find_one({"username":username})
+    database = names.find_one({"username":username})
+    if database != None:
+        description = database["description"]
+        picture = database["picture"]
+        nutrition = database["nut_facts"]
+        return {"username":username,"description":description,"picture":picture,"nut_facts":nutrition}
     else:
         #can't happen only used for debugging purposes
         return "profile doesn't exist"    
+
+@app.route('/user/get_nut/', methods = ['GET'])
+def get_nutrition_facts():
+    data = rqeuest.args
+    username = data["name"]
+    date_of_interest = data["date"]
+    names = mongo.db.user_profiles
+    database = names.find_one({"username":username})
+    if database != None:
+        dates = database["nut_facts"]
+        if date_of_interest not in dates:
+            return "no nutrition facts for that day"
+        else:
+            ret = {}
+            dict_to_read = dates[date_of_interest]
+            for key in dict_to_read.keys():
+                ret.update({key:dict_to_read[key]})
+            return ret
+    else:
+        return "profile not found"
 
 @app.route('/user/update', methods = ['POST'])
 def update_profile():
@@ -64,9 +88,16 @@ def update_profile():
         #this can't happens since the user it always asking just for debugging purposes
         return "profile not found"
     else:
+        if description == None and profile_picture == None:
+            return "can't change username"
+        if description == None:
+            description = database["description"]
+        if profile_picture == None:
+            profile_picture = database["picture"]
         names.update_one(database,{"$set":{"description":description,"picture":profile_picture}})
+    return "updated profile"
 
-@app.route('/user/update_meal/')
+@app.route('/user/update_meal/', methods = ['POST'])
 def update_meal():
     #this can't be done by the user
     #get the current dictionary and add the stuff to it
@@ -99,17 +130,17 @@ def update_meal():
 
 @app.route("/user/check", methods = ['GET'])
 def check():
-    names = mongodb.user_profiles
+    names = mongo.db.user_profiles
     if names.find_one({"username":request.args["name"]}):
         return "false"
     return "true"
 
 @app.route("/login", methods = ['GET'])
 def login():
-    names = mongodb.user_profiles
+    names = mongo.db.user_profiles
     username = request.args["name"]
     password = request.args["password"]
-    databse = names.find_one({"username":username})
+    database = names.find_one({"username":username})
     if database != None and database["password"] == password:
         return "true"
     return "false"
@@ -128,6 +159,6 @@ def create_user():
         return "profile already in use"
     else:
         #add the stuff to it 
-        names.insert_one({'username':username,"password":password,"description":description,"profile_picture":profile_picture, "nut_facts":[]})
+        names.insert_one({'username':username,"password":password,"description":description,"picture":profile_picture, "nut_facts":[]})
         return "added profile"
 app.run()
