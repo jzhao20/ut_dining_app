@@ -158,15 +158,14 @@ def create_user():
         names.insert_one({'username':username,"password":password,"description":description,"picture":profile_picture, "nut_facts":[]})
         return "added profile"
 
-@app.route('/image/classify' methods = ['POST'])
+@app.route('/image/classify', methods = ['POST'])
 def classify():
     data = request.get_json()
     image = data["image"]
-    images = mongo.db.food_images
     if images == None:
         return "not enough training data"
     else:
-        return image_classification.classify(image, images)
+        return image_classification.classify(image)
 
 @app.route('/image/results', methods = ['POST'])
 def update_data():
@@ -182,7 +181,7 @@ def update_data():
         metadata = str(int(answer)) +" 1 1"
     else:
         split = [int(num) for num in metadata.split(" ")]
-        if answer == True and split[2] >= 100 and float(split[0])/float(split[1])>=.9:
+        if answer == True and split[2] >= 10000 and float(split[0])/float(split[1])>=.9:
             split[0]+=1
             split[1]+=1
             file.truncate()
@@ -195,10 +194,11 @@ def update_data():
             file.truncate()
             file.write(" ".join(split))
     images = mongo.db.food_images
-    database = images.find_one({"name":answer})
-    if database != None:
-        database.update($push: {"base64":image})
+    if not os.path.exists(training_data):
+        image_classification(image, answer, images)
     else:
-        images.insert_one({"name":answer, "base64":[image]})
+         image_classification.update_training(image, answer)
+    images.insert_one({"name":answer, "base64": image_classification.process_images(image)})
+   
 
 app.run()
