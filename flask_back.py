@@ -1,5 +1,6 @@
 import os
 import scrape
+import image_classification
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 from datetime import datetime, date
@@ -33,10 +34,7 @@ def call_func():
         dates.find_one_and_update({"date":date_specified}, {"$push":{'data':{'dining_hall_and_meal':access_dict, 'menu':res}}})
     else:
         #create database
-        print("is this happening")
         if date_adjusted != cur_date:
-            print(date_adjusted)
-            print(cur_date)
             return "menu not found for this date"
         res = scrape.call(request.args)
         dates.insert_one({'date':date_specified, 'data':[{'dining_hall_and_meal':access_dict, 'menu':res}]})
@@ -124,7 +122,7 @@ def update_meal():
                 nut_facts.update({key : data[key]+nut_facts[key]})
         names.update({database,{"$set":{cur_date:nut_facts}}})
     else:
-        #doesn't exist need to insert the nutritoin facts for the day
+        #doesn't exist need to insert the nutrition facts for the day
         dictionary_to_insert = {cur_date:data}
         database["nut_facts"].insert_one(dictionary_to_insert)
 
@@ -147,9 +145,7 @@ def login():
 
 @app.route('/user/create', methods = ['POST'])
 def create_user():
-    print("hello there")
     data = request.get_json()
-    print(data)
     names = mongo.db.user_profiles
     username = data["name"]
     password = data["password"]
@@ -161,4 +157,48 @@ def create_user():
         #add the stuff to it 
         names.insert_one({'username':username,"password":password,"description":description,"picture":profile_picture, "nut_facts":[]})
         return "added profile"
+
+@app.route('/image/classify' methods = ['POST'])
+def classify():
+    data = request.get_json()
+    image = data["image"]
+    images = mongo.db.food_images
+    if images == None:
+        return "not enough training data"
+    else:
+        return image_classification.classify(image, images)
+
+@app.route('/image/results', methods = ['POST'])
+def update_data():
+    data = request.get_json()
+    image = data["image"]
+    answer = bool(data["classification"])
+    correct = data["correct"]
+    #update the file and check if greater than 90% at which point don't update it unless you got it wrong
+    file = open("classification_performance.txt", "w+")
+    metadata = file.read()
+    if metadata == "":
+        #file is empty and that means 
+        metadata = str(int(answer)) +" 1 1"
+    else:
+        split = [int(num) for num in metadata.split(" ")]
+        if answer == True and split[2] >= 100 and float(split[0])/float(split[1])>=.9:
+            split[0]+=1
+            split[1]+=1
+            file.truncate()
+            file.write(" ".join(split))
+            return
+        else:
+            split[0]+=int(answer)
+            split[1] +=1
+            split[2]+=1
+            file.truncate()
+            file.write(" ".join(split))
+    images = mongo.db.food_images
+    database = images.find_one({"name":answer})
+    if database != None:
+        database.update($push: {"base64":image})
+    else:
+        images.insert_one({"name":answer, "base64":[image]})
+
 app.run()
