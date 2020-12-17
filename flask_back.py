@@ -4,6 +4,7 @@ import image_classification
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 from datetime import datetime, date
+import re
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb+srv://jzhao20:xyz89012@ut-dining-hall-app.cpyxs.mongodb.net/ut-dining-hall-app?retryWrites=true&w=majority"
 app.config["MONGO_DBNAME"] = "ut-dining-hall-app"
@@ -12,21 +13,17 @@ mongo = PyMongo(app)
 @app.route('/halls/get', methods = ['GET'])
 def get_halls():
     #return a jsonified array 
-    return jsonify(scrape.get_dining_halls())
-@app.route('/meal/get/', methods = ['GET'])
-def call_func():
+    return jsonify(scrape.get_dining_halls)
 
-    date_specified = request.args["date"]
+def update_database(date_specified, dining_hall, meal_time):
     date_adjusted = datetime.strptime(date_specified, "%m/%d/%Y")
     date_adjusted = date_adjusted.strftime("%m/%d/%Y")
     cur_date = date.today()
     cur_date = cur_date.strftime("%m/%d/%Y")
-
-    # if date != cur_date:
-                # return "menu not found for this date"
-    access_dict = request.args["dining_hall"]+ "-"+request.args["meal_time"]
+    access_dict = dining_hall+"-"+meal_time
     dates = mongo.db.stored_dates
     database_to_store = dates.find_one({'date':date_specified})
+    args = {"dining_hall":dining_hall,"meal_time":meal_time}
     if database_to_store != None:
         if "data" in database_to_store:
             for i in database_to_store["data"]:
@@ -34,15 +31,41 @@ def call_func():
                     return i["menu"]
         if date_adjusted != cur_date:
             return "menu not found for this date"
-        res = scrape.call(request.args)
+        res = scrape.call(args)
         dates.find_one_and_update({"date":date_specified}, {"$push":{'data':{'dining_hall_and_meal':access_dict, 'menu':res}}})
     else:
         #create database
         if date_adjusted != cur_date:
             return "menu not found for this date"
-        res = scrape.call(request.args)
+        res = scrape.call(args)
         dates.insert_one({'date':date_specified, 'data':[{'dining_hall_and_meal':access_dict, 'menu':res}]})
     return res
+
+@app.route('/meal/get/', methods = ['GET'])
+def call_func():
+    date_specified = request.args["date"]
+    dining_hall = request.args["dining_hall"]
+    meal_time = request.args["meal_time"]
+    return update_database(date_specified, dining_hall, meal_time)
+
+@app.route('/meal/get_item', methods = ['GET'])
+def get_item():
+    data = request.args
+    date = data["date"]
+    dining_hall = data["dining_hall"]
+    meal_time = data["meal_time"]
+    access_dict = dining_hall+"-"+"meal_time"
+    food = data["food"]
+    dates = mongo.db.stored_dates
+    database_to_read = dates.find_one({'date':date})
+    if database_to_read == None or database_to_read.find_one({"dining_hall_and_meal":access_dict})==None:
+        update_database(date, dining_hall, meal_time)
+        database_to_read = dates.find_one({'date':cur_date})
+    database_to_read = database_to_read.find_one({"dining_hall_and_meal":access_dict})["menu"]
+    try:
+        return database_to_read[food]
+    except:
+        return "item doesn't exist"
 
 @app.route('/user/get/', methods = ['GET'])
 def user_profile():
@@ -99,6 +122,27 @@ def update_profile():
         names.update_one(database,{"$set":{"description":description,"picture":profile_picture}})
     return "updated profile"
 
+def get_dictionary(database, food):
+    data = {}
+    regex = re.compile(r"[-+]?\d*\.\d+|\d+")
+    other_regex = re.compile('[a-zA-Z\s]')
+    for item in food.keys():
+        name = item
+        if database[name] == None:
+            continue
+        else:
+            temp_data = database[name]
+            for nuts in temp_data.keys():
+                if "Serving" not in nuts:
+                    #get the values
+                    if data[nuts]!= None:
+                        number = float(regex.findall(temp_data[nuts])[0])*food[item]
+                        add = float(regex.findall(data[nuts])[0])+number
+                        data[nuts] = str(add)+other_regex.sub('',data[nuts])
+                    else:
+                        data.update({nuts:temp_data[nuts]})
+    return data
+
 @app.route('/user/update_meal/', methods = ['POST'])
 def update_meal():
     #this can't be done by the user
@@ -106,30 +150,46 @@ def update_meal():
     data = request.get_json()
     #read json for the names of all the nutrition facts
     username = data["name"]
+    dining_hall = data["dining_hall"]
+    meal_time = data["meal_time"]
+    access_dict = dining_hall+"-"+meal_time
     cur_date = date.today()
     cur_date = cur_date.strftime("%m/%d/%Y")
     #cur_date is the ony date that can be updated
-    keys = data["nut_facts"].keys()
-    data = data["nut_facts"]
+    #food contains a dicationary food item name and then the number of servings
+    food = data["food"]
+    dates = mongo.db.stored_dates
+    database_to_read = dates.find_one({'date':cur_date})
+    if database_to_read == None or database_to_read.find_one({"dining_hall_and_meal":access_dict})==None:
+        update_database(cur_date, dining_hall, meal_time)
+        database_to_read = dates.find_one({'date':cur_date})
+    #this is going to be the nut facts
+    database_to_read = database_to_read.find_one({"dining_hall_and_meal":access_dict})["menu"]
     names = mongodb.user_profiles
-    database = names.find_one({"username":username})
     if database == None:
         return "profile not found"
-    dates = database["nut_facts"].keys()
-    if cur_date in dates:
+    #get all the nut facts to accumulate to the profile
+    data = get_dictionary(database_to_read, food)
+    database = names.find_one({"username":username})
+    user_dates = database["nut_facts"].keys()
+    if cur_date in user_dates:
         #update that dictionary
-        nut_facts = dates[cur_date]
-        for key in keys:
+        nut_facts = user_dates[cur_date]
+        regex = re.compile(r"[-+]?\d*\.\d+|\d+")
+        other_regex = re.compile('[a-zA-Z\s]')
+        for key in data:
             if key not in nut_facts.keys():
                 nut_facts.update({key : data[key]})  
             else:
-                nut_facts.update({key : data[key]+nut_facts[key]})
+                #stupid regex stuff
+                number = float(regex.findall(data[key])[0])
+                add = float(regex.findall(nut_facts[key])[0])+number
+                nut_facts.update({key : str(add)+other_regex.sub('',nut_facts[key])})
         names.update({database,{"$set":{cur_date:nut_facts}}})
     else:
         #doesn't exist need to insert the nutrition facts for the day
         dictionary_to_insert = {cur_date:data}
         database["nut_facts"].insert_one(dictionary_to_insert)
-
 @app.route("/user/check", methods = ['GET'])
 def check():
     names = mongo.db.user_profiles
