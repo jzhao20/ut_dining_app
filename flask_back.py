@@ -9,6 +9,10 @@ app.config["MONGO_URI"] = "mongodb+srv://jzhao20:xyz89012@ut-dining-hall-app.cpy
 app.config["MONGO_DBNAME"] = "ut-dining-hall-app"
 mongo = PyMongo(app)
 
+@app.route('/halls/get', methods = ['GET'])
+def get_halls():
+    #return a jsonified array 
+    return jsonify(scrape.get_dining_halls())
 @app.route('/meal/get/', methods = ['GET'])
 def call_func():
 

@@ -81,6 +81,15 @@ def filter(args):
                 string = i.text
             ret.append(string.strip())
     return ret
+    
+def get_dining_halls():
+    options = Options()
+    options.add_argument('--headless')
+    options.add_argument('--disable-gpu')
+    driver = webdriver.Chrome("./chromedriver", chrome_options=options)
+    driver.get("https://housing.utexas.edu/dining")
+    list_of_names = driver.find_elements_by_css_selector(".promo-headline [href]")
+    return list(map(lambda x: x.text, list_of_names))
 
 def call(argument):
     options = Options()
