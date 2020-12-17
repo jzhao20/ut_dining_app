@@ -6,6 +6,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options  
 from datetime import date
 import os.path
+import re
 from os import path
 import json
 import sys
@@ -70,18 +71,27 @@ def build_table(table, debug = False):
     return False
 
 def filter(args):
-    ret = []
+    ret = {}
     for i in args:
         if any(char.isdigit() for char in i.text) and ("container" not in i.text) and ("%" not in i.text):
-            string = None
             try:
                 int(i.text)
-                string = "calories "+i.text
+                ret.update({"Calories":i.text})
             except:
-                string = i.text
-            ret.append(string.strip())
+                #this is going to be the word that contains the number is the value and the rest is the key
+                #check serving size
+                if "Includes" not in i.text and not any(char.isdigit() for char in i.text.split(" ")[-1]):
+                    ret.update({"Serving size":i.text})
+                elif "Includes" not in i.text:
+                    value = i.text.split(" ")[-1]
+                    key = i.text.rsplit(' ',1)[0]
+                    regex = re.compile('[^a-zA-Z\s]')
+                    key =regex.sub('',key)
+                    #remove anything that isn't a letter 
+                    ret.update({key:value})
     return ret
-    
+
+
 def get_dining_halls():
     options = Options()
     options.add_argument('--headless')
