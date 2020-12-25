@@ -12,6 +12,8 @@ import {
     BigShouldersDisplay_800ExtraBold,
     BigShouldersDisplay_900Black} from '@expo-google-fonts/big-shoulders-display';
 
+import { AppLoading } from 'expo';
+
  import FrontPage from './assets/components/FrontPage';
 
 
@@ -26,7 +28,9 @@ export default function App() {
     BigShouldersDisplay_800ExtraBold,
     BigShouldersDisplay_900Black,
   });
-
+  if (!fontsLoaded) {
+    return <AppLoading />
+  } else {
   return (
     <View style={styles.container}>
       <FrontPage/>
@@ -62,7 +66,7 @@ export default function App() {
 
       <StatusBar style="auto" />
     </View>
-  );
+  );}
 }
 
 const styles = StyleSheet.create({
