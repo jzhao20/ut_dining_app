@@ -4,7 +4,6 @@ import axios from 'axios';
 import FrontPage from './screens/FrontPage/index'
 import Auth from './screens/Auth/AuthStackNav'
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
-<<<<<<< HEAD
 import { NavigationContainer } from '@react-navigation/native';
 
 const AuthContext = React.createContext({
