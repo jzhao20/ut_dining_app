@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, ImageBackground} from 'react-native';
-import StyledButton from '../StyledButton';
+import StyledButton from '../../assets/StyledButton';
 import styles from './styles';
 
 const FrontPage = (props) => {
@@ -8,7 +8,7 @@ const FrontPage = (props) => {
         <View style={styles.frontPageContainer}>
 
           <ImageBackground
-            source={require('../../images/front/longhorn_logo.png')}
+            source={require('../../assets/images/Front/longhorn_logo.png')}
             style={{
               marginTop: '20%',
               width: 354,

@@ -1,67 +1,29 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import axios from 'axios';
+import FrontPage from './screens/FrontPage/index'
+import Auth from './screens/Auth/AuthStackNav'
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
-import {
-    useFonts,
-    BigShouldersDisplay_100Thin,
-    BigShouldersDisplay_300Light,
-    BigShouldersDisplay_400Regular,
-    BigShouldersDisplay_500Medium,
-    BigShouldersDisplay_600SemiBold,
-    BigShouldersDisplay_700Bold,
-    BigShouldersDisplay_800ExtraBold,
-    BigShouldersDisplay_900Black} from '@expo-google-fonts/big-shoulders-display';
+import { NavigationContainer } from '@react-navigation/native';
 
- import FrontPage from './assets/components/FrontPage';
-
-
+const AuthContext = React.createContext({
+  user:null,
+  diningHalls:[],
+  setUser:null,
+  properties:[],
+  setProperties:null,
+})
 export default function App() {
-  let [fontsLoaded] = useFonts({
-    BigShouldersDisplay_100Thin,
-    BigShouldersDisplay_300Light,
-    BigShouldersDisplay_400Regular,
-    BigShouldersDisplay_500Medium,
-    BigShouldersDisplay_600SemiBold,
-    BigShouldersDisplay_700Bold,
-    BigShouldersDisplay_800ExtraBold,
-    BigShouldersDisplay_900Black,
-  });
-
+  const [user, setUser] = React.useState(null);
+  const [diningHalls, setDiningHalls] = React.useState(null);
   return (
-    <View style={styles.container}>
-      <FrontPage/>
-      {/* <View style={styles.frontPageContainer}>
-
-          <ImageBackground
-            source={require('./assets/images/front/longhorn_logo.png')}
-            style={{
-              marginTop: '20%',
-              width: 354,
-              height: 185,
-              position: 'absolute'}}
-          />
-
-          <ImageBackground
-            source={require('./assets/images/front/rectangle_button.png')}
-            style={{
-              marginTop: '120%',
-              width: 240,
-              height: 54,
-              position: 'absolute'}}
-          />
-          <Text style={styles.button1}>Continue</Text>
-
-          <View style={styles.titles}>
-
-            <Text style={styles.title}>UT Austin Menu</Text>
-            <Text style={styles.subtitle}>Bringing the Joy to Dining</Text>
-
-          </View>
-        
-      </View> */}
-
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+    <AuthContext.Provider
+      value={{ user, setUser, diningHalls}}
+    >
+     {!user ? <Auth /> : <FrontPage />}
+    </AuthContext.Provider>
+    </NavigationContainer>
   );
 }
 

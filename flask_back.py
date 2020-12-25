@@ -6,7 +6,7 @@ from flask_pymongo import PyMongo
 from datetime import datetime, date
 import re
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb+srv://jzhao20:xyz89012@ut-dining-hall-app.cpyxs.mongodb.net/ut-dining-hall-app?retryWrites=true&w=majority"
+app.config["MONGO_URI"] = "mongodb+srv://jzhao20:udha2020@ut-dining-hall-app.cpyxs.mongodb.net/ut-dining-hall-app?retryWrites=true&w=majority"
 app.config["MONGO_DBNAME"] = "ut-dining-hall-app"
 mongo = PyMongo(app)
 
@@ -69,14 +69,14 @@ def get_item():
 
 @app.route('/user/get/', methods = ['GET'])
 def user_profile():
-    username = request.args["name"]
-    names = mongo.db.user_profiles
-    database = names.find_one({"username":username})
+    email = request.args["email"]
+    emails = mongo.db.user_profiles
+    database = emails.find_one({"email":email})
     if database != None:
         description = database["description"]
         picture = database["picture"]
         nutrition = database["nut_facts"]
-        return {"username":username,"description":description,"picture":picture,"nut_facts":nutrition}
+        return {"email":email,"description":description,"picture":picture,"nut_facts":nutrition}
     else:
         #can't happen only used for debugging purposes
         return "profile doesn't exist"    
@@ -84,10 +84,10 @@ def user_profile():
 @app.route('/user/get_nut/', methods = ['GET'])
 def get_nutrition_facts():
     data = rqeuest.args
-    username = data["name"]
+    email = data["email"]
     date_of_interest = data["date"]
-    names = mongo.db.user_profiles
-    database = names.find_one({"username":username})
+    emails = mongo.db.user_profiles
+    database = emails.find_one({"email":email})
     if database != None:
         dates = database["nut_facts"]
         if date_of_interest not in dates:
@@ -104,22 +104,22 @@ def get_nutrition_facts():
 @app.route('/user/update', methods = ['POST'])
 def update_profile():
     data = request.get_json()
-    username = data["name"]
+    email = data["email"]
     description = data["description"]
     profile_picture = data["picture"]
-    names = mongo.db.user_profiles
-    database = names.find_one({"username":username})
+    emails = mongo.db.user_profiles
+    database = emails.find_one({"email":email})
     if database == None:
         #this can't happens since the user it always asking just for debugging purposes
         return "profile not found"
     else:
         if description == None and profile_picture == None:
-            return "can't change username"
+            return "can't change email"
         if description == None:
             description = database["description"]
         if profile_picture == None:
             profile_picture = database["picture"]
-        names.update_one(database,{"$set":{"description":description,"picture":profile_picture}})
+        emails.update_one(database,{"$set":{"description":description,"picture":profile_picture}})
     return "updated profile"
 
 def get_dictionary(database, food):
@@ -149,7 +149,7 @@ def update_meal():
     #get the current dictionary and add the stuff to it
     data = request.get_json()
     #read json for the names of all the nutrition facts
-    username = data["name"]
+    email = data["email"]
     dining_hall = data["dining_hall"]
     meal_time = data["meal_time"]
     access_dict = dining_hall+"-"+meal_time
@@ -165,12 +165,12 @@ def update_meal():
         database_to_read = dates.find_one({'date':cur_date})
     #this is going to be the nut facts
     database_to_read = database_to_read.find_one({"dining_hall_and_meal":access_dict})["menu"]
-    names = mongodb.user_profiles
+    emails = mongodb.user_profiles
     if database == None:
         return "profile not found"
     #get all the nut facts to accumulate to the profile
     data = get_dictionary(database_to_read, food)
-    database = names.find_one({"username":username})
+    database = emails.find_one({"email":email})
     user_dates = database["nut_facts"].keys()
     if cur_date in user_dates:
         #update that dictionary
@@ -185,24 +185,24 @@ def update_meal():
                 number = float(regex.findall(data[key])[0])
                 add = float(regex.findall(nut_facts[key])[0])+number
                 nut_facts.update({key : str(add)+other_regex.sub('',nut_facts[key])})
-        names.update({database,{"$set":{cur_date:nut_facts}}})
+        emails.update({database,{"$set":{cur_date:nut_facts}}})
     else:
         #doesn't exist need to insert the nutrition facts for the day
         dictionary_to_insert = {cur_date:data}
         database["nut_facts"].insert_one(dictionary_to_insert)
 @app.route("/user/check", methods = ['GET'])
 def check():
-    names = mongo.db.user_profiles
-    if names.find_one({"username":request.args["name"]}):
+    emails = mongo.db.user_profiles
+    if emails.find_one({"email":request.args["email"]}):
         return "false"
     return "true"
 
 @app.route("/login", methods = ['GET'])
 def login():
-    names = mongo.db.user_profiles
-    username = request.args["name"]
+    emails = mongo.db.user_profiles
+    email = request.args["emnail"]
     password = request.args["password"]
-    database = names.find_one({"username":username})
+    database = emails.find_one({"email":email})
     if database != None and database["password"] == password:
         return "true"
     return "false"
@@ -210,16 +210,16 @@ def login():
 @app.route('/user/create', methods = ['POST'])
 def create_user():
     data = request.get_json()
-    names = mongo.db.user_profiles
-    username = data["name"]
+    emails = mongo.db.user_profiles
+    email = data["email"]
     password = data["password"]
     description = data["description"]
     profile_picture = data["picture"]
-    if names.find_one({"username":username}):
+    if emails.find_one({"email":email}):
         return "profile already in use"
     else:
         #add the stuff to it 
-        names.insert_one({'username':username,"password":password,"description":description,"picture":profile_picture, "nut_facts":[]})
+        emails.insert_one({'email':email,"password":password,"description":description,"picture":profile_picture, "nut_facts":[]})
         return "added profile"
 
 @app.route('/image/classify', methods = ['POST'])
