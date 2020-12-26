@@ -25,7 +25,7 @@ export default function App() {
     </AuthContext.Provider>
     </NavigationContainer>
   );
-
+}
 
 const styles = StyleSheet.create({
   container: {
