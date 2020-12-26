@@ -9,6 +9,11 @@ function CalendarScreen(props) {
             <View>
                 <CalendarList
                     onVisibleMonthsChange={(months) => {console.log('now these months are visible', months);}}
+
+                    // Change for pressing a certain date
+                    onDayPress={(day) => {console.log('selected day', day)}}
+                    onDayLongPress={(day) => {console.log('selected day', day)}}
+
                     // Max amount of months allowed to scroll to the past. Default = 50
                     pastScrollRange={1}
                     // Max amount of months allowed to scroll to the future. Default = 50

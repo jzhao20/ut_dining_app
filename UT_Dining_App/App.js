@@ -6,9 +6,20 @@ import Auth from './screens/Auth/AuthStackNav';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 
+import {
+  useFonts,
+  BigShouldersDisplay_100Thin,
+  BigShouldersDisplay_300Light,
+  BigShouldersDisplay_400Regular,
+  BigShouldersDisplay_500Medium,
+  BigShouldersDisplay_600SemiBold,
+  BigShouldersDisplay_700Bold,
+  BigShouldersDisplay_800ExtraBold,
+  BigShouldersDisplay_900Black} from '@expo-google-fonts/big-shoulders-display';
+import { AppLoading } from 'expo';
 import { createStackNavigator } from '@react-navigation/stack';
 import CalendarScreen from './screens/CalendarScreen/index';
-import { Calendar } from 'react-native-calendars';
+// import { Calendar } from 'react-native-calendars';
 // import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 
 const Stack = createStackNavigator()
@@ -24,10 +35,28 @@ const AuthContext = React.createContext({
 export default function App() {
   const [user, setUser] = React.useState(null);
   const [diningHalls, setDiningHalls] = React.useState(null);
+  let [fontsLoaded] = useFonts({
+    BigShouldersDisplay_100Thin,
+    BigShouldersDisplay_300Light,
+    BigShouldersDisplay_400Regular,
+    BigShouldersDisplay_500Medium,
+    BigShouldersDisplay_600SemiBold,
+    BigShouldersDisplay_700Bold,
+    BigShouldersDisplay_800ExtraBold,
+    BigShouldersDisplay_900Black,
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />
+  }
   return (
     <NavigationContainer>
       {/* <CalendarList/> */}
-      <Stack.Navigator initialRouteName='FrontPage'>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+        initialRouteName='FrontPage'
+      >
         <Stack.Screen name='FrontPage' component={FrontPage}/>
         <Stack.Screen name='CalendarScreen' component={CalendarScreen}/>
       </Stack.Navigator>
