@@ -1,10 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import axios from 'axios';
-import FrontPage from './screens/FrontPage/index'
-import Auth from './screens/Auth/AuthStackNav'
+import FrontPage from './screens/FrontPage/index';
+import Auth from './screens/Auth/AuthStackNav';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+
+import { createStackNavigator } from '@react-navigation/stack';
+import CalendarScreen from './screens/CalendarScreen/index';
+import { Calendar } from 'react-native-calendars';
+// import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+
+const Stack = createStackNavigator()
 
 const AuthContext = React.createContext({
   user:null,
@@ -13,18 +20,25 @@ const AuthContext = React.createContext({
   properties:[],
   setProperties:null,
 })
+
 export default function App() {
   const [user, setUser] = React.useState(null);
   const [diningHalls, setDiningHalls] = React.useState(null);
   return (
     <NavigationContainer>
-    <AuthContext.Provider
+      {/* <CalendarList/> */}
+      <Stack.Navigator initialRouteName='FrontPage'>
+        <Stack.Screen name='FrontPage' component={FrontPage}/>
+        <Stack.Screen name='CalendarScreen' component={CalendarScreen}/>
+      </Stack.Navigator>
+
+    {/* <AuthContext.Provider
       value={{ user, setUser, diningHalls}}
     >
      {!user ? <Auth /> : <FrontPage />}
-    </AuthContext.Provider>
+    </AuthContext.Provider> */}
     </NavigationContainer>
-  );
+  );}
 
 
 const styles = StyleSheet.create({

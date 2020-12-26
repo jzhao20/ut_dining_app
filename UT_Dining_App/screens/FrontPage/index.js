@@ -3,7 +3,8 @@ import {View, Text, ImageBackground} from 'react-native';
 import StyledButton from '../../assets/StyledButton';
 import styles from './styles';
 
-const FrontPage = (props) => {
+// const FrontPage = (props) => {
+function FrontPage(props) {
     return (
         <View style={styles.frontPageContainer}>
 
@@ -39,7 +40,8 @@ const FrontPage = (props) => {
               type="primary"
               content={"Continue"}
               onPress={() => {
-                console.warn("Continue pressed")
+                // console.warn("Continue pressed")
+                props.navigation.navigate('CalendarScreen');
               }}
             />
           </View>
