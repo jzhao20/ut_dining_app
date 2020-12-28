@@ -214,7 +214,10 @@ def create_user():
     email = data["email"]
     password = data["password"]
     description = data["description"]
-    profile_picture = data["picture"]
+    try:
+    	profile_picture = data["picture"]
+    except:
+    	profile_picture = ""
     if emails.find_one({"email":email}):
         return "profile already in use"
     else:
