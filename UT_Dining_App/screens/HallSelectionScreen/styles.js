@@ -1,5 +1,9 @@
 import { StyleSheet } from 'react-native';
 
+import { Dimensions } from 'react-native';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
     container: {
         width: '100%',
@@ -34,38 +38,44 @@ const styles = StyleSheet.create({
     
     image1touch: {
         position: 'absolute',
-        top: 170,
+        marginTop: '50%',
+        // top: 170,
         left: 40,
     },
 
     image: {
-        width: 120,
-        height: 120,
+        width: windowWidth*0.32,
+        height: windowWidth*0.32,
+        // height: 120,
         borderWidth: 2,
         borderColor: '#C4C4C4',
     },
 
     image2touch: {
         position: 'absolute',
-        top: 170,
+        marginTop: '50%',
+        // top: 170,
         right: 40,
     },
 
     image3touch: {
         position: 'absolute',
-        top: 300,
+        marginTop: '85%',
+        // top: 300,
         left: 40,
     },
 
     image4touch: {
         position: 'absolute',
-        top: 300,
+        marginTop: '85%',
+        // top: 300,
         right: 40,
     },
 
     image5touch: {
         position: 'absolute',
-        top: 430,
+        marginTop: '120%',
+        // top: 430,
     },
 
 });
