@@ -1,5 +1,5 @@
 import React, { useState, useContext} from 'react';
-import {AuthContext} from '../App';
+import {AuthContext} from '../../App';
 import {TextInput} from 'react-native-gesture-handler';
 export default function Login({navigation}){
     const[email, setEmail] = useState('')

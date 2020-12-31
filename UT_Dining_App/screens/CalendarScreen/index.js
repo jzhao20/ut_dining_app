@@ -11,7 +11,10 @@ function CalendarScreen(props) {
                     onVisibleMonthsChange={(months) => {console.log('now these months are visible', months);}}
 
                     // Change for pressing a certain date
-                    onDayPress={(day) => {console.log('selected day', day)}}
+                    // onDayPress={(day) => {console.warn('selected day', day)}}
+                    onDayPress={(day) => {props.navigation.navigate('MealSelectionScreen', {
+                        day:day.day, month:day.month, year:day.year});
+                    }}
                     onDayLongPress={(day) => {console.log('selected day', day)}}
 
                     // Max amount of months allowed to scroll to the past. Default = 50

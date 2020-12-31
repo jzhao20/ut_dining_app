@@ -41,7 +41,7 @@ function FrontPage(props) {
               content={"Continue"}
               onPress={() => {
                 // console.warn("Continue pressed")
-                props.navigation.navigate('CalendarScreen');
+                props.navigation.navigate('Search');
               }}
             />
           </View>
