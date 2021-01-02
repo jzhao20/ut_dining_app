@@ -19,8 +19,11 @@ import {
 import { AppLoading } from 'expo';
 import { createStackNavigator } from '@react-navigation/stack';
 import CalendarScreen from './screens/CalendarScreen/index';
+import Tabs from './navigation/tabs';
 // import { Calendar } from 'react-native-calendars';
 // import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import HallSelectionScreen from './screens/HallSelectionScreen/index';
+import MealtimeSelectionScreen from './screens/MealtimeSelectionScreen/index';
 
 const Stack = createStackNavigator()
 
@@ -31,6 +34,16 @@ const AuthContext = React.createContext({
   properties:[],
   setProperties:null,
 })
+
+// const HomeStack = createStackNavigator()
+// function HomeStackScreen() {
+//   return (
+//     <HomeStack.Navigator>
+//       <HomeStack.Screen name='Home' component={FrontPage}/>
+//       <HomeStack.Screen name='Search' component={Tabs}/>
+//     </HomeStack.Navigator>
+//   );
+// }
 
 export default function App() {
   const [user, setUser] = React.useState(null);
@@ -49,16 +62,20 @@ export default function App() {
     return <AppLoading />
   }
   return (
+    // <HallSelectionScreen day='24th' month='November' year='2020' meal='Lunch'></HallSelectionScreen>
+    // <MealtimeSelectionScreen day='24th' month='November' year='2020' meal='Lunch'></MealtimeSelectionScreen>
     <NavigationContainer>
       {/* <CalendarList/> */}
       <Stack.Navigator
         screenOptions={{
           headerShown: false
         }}
-        initialRouteName='FrontPage'
+        initialRouteName='TabScreen'
       >
-        <Stack.Screen name='FrontPage' component={FrontPage}/>
-        <Stack.Screen name='CalendarScreen' component={CalendarScreen}/>
+        {/* <Stack.Screen name='FrontPage' component={HomeStackScreen}/> */}
+        {/* <Stack.Screen name='FrontPage' component={FrontPage}/>
+        <Stack.Screen name='CalendarScreen' component={Tabs}/> */}
+        <Stack.Screen name='TabScreen' component={Tabs}/>
       </Stack.Navigator>
 
     {/* <AuthContext.Provider
