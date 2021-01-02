@@ -12,7 +12,7 @@ mongo = PyMongo(app)
 
 @app.route('/halls/get', methods = ['GET'])
 def get_halls():
-    #return a jsonified array 
+    #return a jsonified array
     return jsonify(scrape.get_dining_halls)
 
 def update_database(date_specified, dining_hall, meal_time):
@@ -79,7 +79,7 @@ def user_profile():
         return {"email":email,"description":description,"picture":picture,"nut_facts":nutrition}
     else:
         #can't happen only used for debugging purposes
-        return "profile doesn't exist"    
+        return "profile doesn't exist"
 
 @app.route('/user/get_nut/', methods = ['GET'])
 def get_nutrition_facts():
@@ -125,7 +125,7 @@ def update_profile():
 def get_dictionary(database, food):
     data = {}
     regex = re.compile(r"[-+]?\d*\.\d+|\d+")
-    other_regex = re.compile('[a-zA-Z\s]')
+    other_regex = re.compile('[0-9.]')
     for item in food.keys():
         name = item
         if database[name] == None:
@@ -153,8 +153,11 @@ def update_meal():
     dining_hall = data["dining_hall"]
     meal_time = data["meal_time"]
     access_dict = dining_hall+"-"+meal_time
-    cur_date = date.today()
-    cur_date = cur_date.strftime("%m/%d/%Y")
+    try:
+        cur_date = data["date"]
+    except:
+        cur_date = date.today()
+        cur_date = cur_date.strftime("%m/%d/%Y")
     #cur_date is the ony date that can be updated
     #food contains a dicationary food item name and then the number of servings
     food = data["food"]
@@ -165,34 +168,98 @@ def update_meal():
         database_to_read = dates.find_one({'date':cur_date})
     #this is going to be the nut facts
     database_to_read = database_to_read.find_one({"dining_hall_and_meal":access_dict})["menu"]
-    emails = mongodb.user_profiles
+    emails = mongo.db.user_profiles
     if database == None:
         return "profile not found"
     #get all the nut facts to accumulate to the profile
     data = get_dictionary(database_to_read, food)
     database = emails.find_one({"email":email})
-    user_dates = database["nut_facts"].keys()
-    if cur_date in user_dates:
-        #update that dictionary
-        nut_facts = user_dates[cur_date]
+    counter = 0
+    database_to_edit = None
+    for i in database["nut_facts"]:
+        if i['date'] == cur_date:
+            database_to_edit = i
+            break
+        counter+=1
+    if database_to_edit is not None:
+            #update that dictionary
+        nut_facts = database_to_edit["data"]
         regex = re.compile(r"[-+]?\d*\.\d+|\d+")
-        other_regex = re.compile('[a-zA-Z\s]')
+        other_regex = re.compile('[0-9.]')
         for key in data:
             if key not in nut_facts.keys():
-                nut_facts.update({key : data[key]})  
+                nut_facts.update({key : data[key]})
             else:
                 #stupid regex stuff
                 number = float(regex.findall(data[key])[0])
-                add = float(regex.findall(nut_facts[key])[0])+number
-                nut_facts.update({key : str(add)+other_regex.sub('',nut_facts[key])})
-        emails.update({database,{"$set":{cur_date:nut_facts}}})
+                print(number)
+
+                add = float(regex.findall(nut_facts[key])[0])
+                print(add)
+                total = add+number
+                print(other_regex.sub('',nut_facts[key]))
+                nut_facts.update({key : str(total)+other_regex.sub('',nut_facts[key])})
+        database["nut_facts"][counter] = {"date":cur_date, "data":nut_facts}
+        emails.find_one_and_update({"email":email},{"$set":{"nut_facts":database["nut_facts"]}})
     else:
-        #doesn't exist need to insert the nutrition facts for the day
-        dictionary_to_insert = {cur_date:data}
-        database["nut_facts"].insert_one(dictionary_to_insert)
-@app.route("/user/check", methods = ['GET'])
-def check():
+        #dates.find_one_and_update({"date":date_specified}, {"$push":{'data':{'dining_hall_and_meal':access_dict, 'menu':res}}})
+        emails.find_one_and_update({"email":email},{"$push":{"nut_facts":{"date":cur_date,"data":data}}})
+    return "finished"
+
+@app.route("/user/update_meal_test", methods = ['POST'])
+def update_meal_test():
+    data = request.get_json()
+    #read json for the names of all the nutrition facts
     emails = mongo.db.user_profiles
+    email = data["email"]
+    try:
+    	cur_date = data["date"]
+    except:
+	    cur_date = date.today()
+	    cur_date = cur_date.strftime("%m/%d/%Y")
+    #cur_date is the ony date that can be updated
+    #food contains a dicationary food item name and then the number of servings
+    data = data["nut_facts"]
+    database = emails.find_one({"email":email})
+    counter = 0
+    database_to_edit = None
+    for i in database["nut_facts"]:
+        if i['date'] == cur_date:
+            database_to_edit = i
+            break
+        counter+=1
+    if database_to_edit is not None:
+            #update that dictionary
+        nut_facts = database_to_edit["data"]
+        regex = re.compile(r"[-+]?\d*\.\d+|\d+")
+        other_regex = re.compile('[0-9.]')
+        for key in data:
+            if key not in nut_facts.keys():
+                nut_facts.update({key : data[key]})
+            else:
+                #stupid regex stuff
+                number = float(regex.findall(data[key])[0])
+                print(number)
+
+                add = float(regex.findall(nut_facts[key])[0])
+                print(add)
+                total = add+number
+                print(other_regex.sub('',nut_facts[key]))
+                nut_facts.update({key : str(total)+other_regex.sub('',nut_facts[key])})
+        database["nut_facts"][counter] = {"date":cur_date, "data":nut_facts}
+        emails.find_one_and_update({"email":email},{"$set":{"nut_facts":database["nut_facts"]}})
+    else:
+        print("hello here")
+        #dates.find_one_and_update({"date":date_specified}, {"$push":{'data':{'dining_hall_and_meal':access_dict, 'menu':res}}})
+        emails.find_one_and_update({"email":email},{"$push":{"nut_facts":{"date":cur_date,"data":data}}})
+    return "hello"
+@app.route("/user/check", methods = ['GET'])
+def check(email = ""):
+    emails = mongo.db.user_profiles
+    if email != "":
+        if emails.find_one({"email":email}):
+            return True
+        return False
     if emails.find_one({"email":request.args["email"]}):
         return "false"
     return "true"
@@ -212,16 +279,21 @@ def create_user():
     data = request.get_json()
     emails = mongo.db.user_profiles
     email = data["email"]
+    if check(email = email):
+        return "email already in use"
     password = data["password"]
-    description = data["description"]
     try:
-    	profile_picture = data["picture"]
+        description = data["description"]
     except:
-    	profile_picture = ""
+        description = ""
+    try:
+        profile_picture = data["picture"]
+    except:
+        profile_picture = ""
     if emails.find_one({"email":email}):
         return "profile already in use"
     else:
-        #add the stuff to it 
+        #add the stuff to it
         emails.insert_one({'email':email,"password":password,"description":description,"picture":profile_picture, "nut_facts":[]})
         return "added profile"
 
@@ -244,7 +316,7 @@ def update_data():
     file = open("classification_performance.txt", "w+")
     metadata = file.read()
     if metadata == "":
-        #file is empty and that means 
+        #file is empty and that means
         metadata = str(int(answer)) +" 1 1"
     else:
         split = [int(num) for num in metadata.split(" ")]
@@ -264,8 +336,8 @@ def update_data():
     if not os.path.exists(training_data):
         image_classification(image, answer, images)
     else:
-         image_classification.update_training(image, answer)
+        image_classification.update_training(image, answer)
     images.insert_one({"name":answer, "base64": image_classification.process_images(image)})
-   
+
 
 app.run()
