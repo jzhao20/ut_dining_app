@@ -192,17 +192,12 @@ def update_meal():
             else:
                 #stupid regex stuff
                 number = float(regex.findall(data[key])[0])
-                print(number)
-
                 add = float(regex.findall(nut_facts[key])[0])
-                print(add)
                 total = add+number
-                print(other_regex.sub('',nut_facts[key]))
                 nut_facts.update({key : str(total)+other_regex.sub('',nut_facts[key])})
         database["nut_facts"][counter] = {"date":cur_date, "data":nut_facts}
         emails.find_one_and_update({"email":email},{"$set":{"nut_facts":database["nut_facts"]}})
     else:
-        #dates.find_one_and_update({"date":date_specified}, {"$push":{'data':{'dining_hall_and_meal':access_dict, 'menu':res}}})
         emails.find_one_and_update({"email":email},{"$push":{"nut_facts":{"date":cur_date,"data":data}}})
     return "finished"
 
@@ -239,18 +234,12 @@ def update_meal_test():
             else:
                 #stupid regex stuff
                 number = float(regex.findall(data[key])[0])
-                print(number)
-
                 add = float(regex.findall(nut_facts[key])[0])
-                print(add)
                 total = add+number
-                print(other_regex.sub('',nut_facts[key]))
                 nut_facts.update({key : str(total)+other_regex.sub('',nut_facts[key])})
         database["nut_facts"][counter] = {"date":cur_date, "data":nut_facts}
         emails.find_one_and_update({"email":email},{"$set":{"nut_facts":database["nut_facts"]}})
     else:
-        print("hello here")
-        #dates.find_one_and_update({"date":date_specified}, {"$push":{'data':{'dining_hall_and_meal':access_dict, 'menu':res}}})
         emails.find_one_and_update({"email":email},{"$push":{"nut_facts":{"date":cur_date,"data":data}}})
     return "hello"
 @app.route("/user/check", methods = ['GET'])
