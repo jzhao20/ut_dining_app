@@ -3,7 +3,7 @@ import Realm from "realm";
 import { getRealmApp } from "../getRealmApp";
 
 // Access the Realm App.
-const app = getRealmApp();
+const app = useContext(getRealmApp());
 
 // Create a new Context object that will be provided to descendants of
 // the AuthProvider.
@@ -69,15 +69,44 @@ const AuthProvider = ({ children }) => {
   // The signIn function takes an email and password and uses the
   // emailPassword authentication provider to log in.
   const signIn = async (email, password) => {
-    const creds = Realm.Credentials.emailPassword(email, password);
-    const newUser = await app.logIn(creds);
-    setUser(newUser);
+    const check = {
+      "email":email,
+      "password":password,
+    };
+    await app.collection.findOne(check).then(result=>{
+      if(result){
+        setUser(result)
+      }
+      else{
+        console.warn("incorrect password or the account isn't in use")
+      }
+    });
   };
 
   // The signUp function takes an email and password and uses the
   // emailPassword authentication provider to register the user.
   const signUp = async (email, password) => {
-    await app.emailPasswordAuth.registerUser(email, password);
+    const check  = {
+      "email":email,
+    };
+    const profile = {
+      "$set":{
+        "email":email,
+        "password":password,
+        "description":"",
+        "picture":"",
+        "nut_facts":[],
+      }
+    };
+    await app.collection.findOne(check).then(result =>{
+      if (result){
+        console.warn("email already in use")
+      }
+      else{
+        app.collection.insertOne(profile)
+      }
+    });
+    signIn(email, password);
   };
 
   // The signOut function calls the logOut function on the currently
@@ -87,10 +116,14 @@ const AuthProvider = ({ children }) => {
       console.warn("Not logged in, can't log out!");
       return;
     }
-    user.logOut();
     setUser(null);
   };
-
+  const updateProfile = async(email, description, base64_image) =>{
+    await 
+  };
+  const getUser = (uid) =>{
+      return 
+  }
   return (
     <AuthContext.Provider
       value={{
