@@ -256,7 +256,7 @@ def check(email = ""):
 @app.route("/login", methods = ['GET'])
 def login():
     emails = mongo.db.user_profiles
-    email = request.args["emnail"]
+    email = request.args["email"]
     password = request.args["password"]
     database = emails.find_one({"email":email})
     if database != None and database["password"] == password:
