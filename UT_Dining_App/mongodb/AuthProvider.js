@@ -118,29 +118,37 @@ const AuthProvider = ({ children }) => {
     }
     setUser(null);
   };
-  const updateProfile = async(id, description, base64_image) =>{
+  const updateProfile = async(description, base64_image) =>{
     const check = {
-      "_id":id,
+      "_id":user,
     }
     const profile = {
       "$set":{
         "description":"",
         "picture":"",
-        "nut_facts":[],
       }
     };
-    app.collection.findOne(check).then(result=>{
+    await app.collection.findOne(check).then(result=>{
       result.updateOne(profile)
     });
   };
+  const get_nut = async(id) =>{
+    const check = {
+      "_id":user,
+    }
+    await app.collection.findOne(check).then(result=>{
+      return result["nut_facts"]
+    })
+  }
   return (
     <AuthContext.Provider
       value={{
         signUp,
         signIn,
         signOut,
+        updateProfile,
+        get_nut,
         user,
-        projectData, // list of projects the user is a memberOf
       }}
     >
       {children}
