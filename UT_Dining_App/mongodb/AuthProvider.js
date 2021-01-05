@@ -75,7 +75,7 @@ const AuthProvider = ({ children }) => {
     };
     await app.collection.findOne(check).then(result=>{
       if(result){
-        setUser(result)
+        setUser(result._id)
       }
       else{
         console.warn("incorrect password or the account isn't in use")
@@ -118,12 +118,21 @@ const AuthProvider = ({ children }) => {
     }
     setUser(null);
   };
-  const updateProfile = async(email, description, base64_image) =>{
-    await 
+  const updateProfile = async(id, description, base64_image) =>{
+    const check = {
+      "_id":id,
+    }
+    const profile = {
+      "$set":{
+        "description":"",
+        "picture":"",
+        "nut_facts":[],
+      }
+    };
+    app.collection.findOne(check).then(result=>{
+      result.updateOne(profile)
+    });
   };
-  const getUser = (uid) =>{
-      return 
-  }
   return (
     <AuthContext.Provider
       value={{
