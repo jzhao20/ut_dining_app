@@ -8,6 +8,34 @@ import FrontPage from '../screens/FrontPage/index';
 import HallSelectionScreen from '../screens/HallSelectionScreen/index';
 import MealtimeSelectionScreen from '../screens/MealtimeSelectionScreen/index';
 
+import SignUpScreen from '../screens/SignUpScreen/index';
+import SignInScreen from '../screens/SignInScreen/index';
+
+const LoginStack = createStackNavigator();
+
+function LoginStackScreen () {
+    return (
+        <LoginStack.Navigator
+            initialRouteName='SignInScreen'
+            screenOptions={{
+                headerShown: false
+              }}>
+            <LoginStack.Screen
+                name='SignInScreen'
+                component={SignInScreen}
+            />
+            <LoginStack.Screen
+                name='SignUpScreen'
+                component={SignUpScreen}
+            />
+            <LoginStack.Screen
+                name='FrontPage'
+                component={FrontPage}
+            />
+        </LoginStack.Navigator>
+    );
+}
+
 const SelectionStack = createStackNavigator();
 
 function SelectionStackScreen () {
@@ -59,7 +87,8 @@ const Tabs = () => {
             }}
         >
             <Tab.Screen
-                name='Home' component={FrontPage}
+                // name='Home' component={FrontPage}
+                name='Home' component={LoginStackScreen}
                 options={{
                     tabBarVisible: false,
                     tabBarIcon: ({focused}) => (

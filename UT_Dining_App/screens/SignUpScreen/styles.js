@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 
     signupText: {
         marginVertical: 50,
-        color: 'gray',
+        color: 'gray'
     }
 });
 
