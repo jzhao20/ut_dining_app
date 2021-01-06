@@ -8,6 +8,28 @@ import FrontPage from '../screens/FrontPage/index';
 import HallSelectionScreen from '../screens/HallSelectionScreen/index';
 import MealtimeSelectionScreen from '../screens/MealtimeSelectionScreen/index';
 
+import SignUpScreen from '../screens/SignUpScreen/index';
+import SingInScreen from '../screens/SignInScreen/index';
+import SignInScreen from '../screens/SignInScreen/index';
+
+const LoginStack = createStackNavigator();
+
+function LoginStackScreen () {
+    return (
+        <LoginStack.Navigator
+            initialRouteName='SignInScreen'>
+            <LoginStack.Screen
+                name='SignInScreen'
+                component={SignInScreen}
+            />
+            <LoginStack.Screen
+                name='SignUpScreen'
+                component={SignUpScreen}
+            />
+        </LoginStack.Navigator>
+    );
+}
+
 const SelectionStack = createStackNavigator();
 
 function SelectionStackScreen () {
