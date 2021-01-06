@@ -18,7 +18,7 @@ export const signIn = async (email, password) => {
     };
     await app.collection.findOne(check).then(result=>{
       if(result){
-        setUser(result._id)
+        setUser(result["email"])
       }
       else{
         console.warn("incorrect password or the account isn't in use")
@@ -64,7 +64,7 @@ export const signOut = () => {
   };
 export const updateProfile = async(description, base64_image) =>{
     const check = {
-      "_id":user,
+      "email":user,
     }
     const profile = {
       "$set":{
@@ -78,7 +78,7 @@ export const updateProfile = async(description, base64_image) =>{
   };
 export const get_nut = async(id) =>{
     const check = {
-      "_id":user,
+      "email":user,
     }
     await app.collection.findOne(check).then(result=>{
       return result["nut_facts"]
