@@ -17,17 +17,6 @@ function FrontPage(props) {
               position: 'absolute'}}
           />
 
-          {/* <ImageBackground
-            source={require('../../images/front/rectangle_button.png')}
-            style={{
-              marginTop: '120%',
-              width: 240,
-              height: 54,
-              position: 'absolute'}}
-          />
-
-          <Text style={styles.button1}>Continue</Text> */}
-
           <View style={styles.titles}>
 
             <Text style={styles.title}>UT Austin Menu</Text>
@@ -45,7 +34,6 @@ function FrontPage(props) {
               }}
             />
           </View>
-          
         
       </View>
     );

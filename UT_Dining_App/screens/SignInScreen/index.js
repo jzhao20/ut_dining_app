@@ -61,7 +61,7 @@ function SignInScreen({navigation}) {
                 </View>
                 
                 <TouchableOpacity>
-                    <Text style={styles.signupText} onPress={() => console.warn('stuff works')}>
+                    <Text style={styles.signupText} onPress={() => {console.warn('button pressed');}}>
                         Don't have an account?
                     </Text>
                 </TouchableOpacity>
@@ -70,6 +70,6 @@ function SignInScreen({navigation}) {
             </View>
         </SafeAreaView>
     );
-}
+};
 
 export default SignInScreen;

@@ -72,6 +72,6 @@ function SignUpScreen({navigation}) {
             </View>
         </SafeAreaView>
     );
-}
+};
 
 export default SignUpScreen;

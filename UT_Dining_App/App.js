@@ -24,7 +24,7 @@ import Tabs from './navigation/tabs';
 // import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import HallSelectionScreen from './screens/HallSelectionScreen/index';
 import MealtimeSelectionScreen from './screens/MealtimeSelectionScreen/index';
-import SignUpScreen from './screens/SignUpScreen/index';
+import SignInScreen from './screens/SignInScreen/index';
 
 const Stack = createStackNavigator()
 
@@ -63,7 +63,7 @@ export default function App() {
     return <AppLoading />
   }
   return (
-    <SignUpScreen/>
+    <SignInScreen/>
     // <NavigationContainer>
     //   <Stack.Navigator
     //     screenOptions={{
