@@ -24,6 +24,7 @@ import Tabs from './navigation/tabs';
 // import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import HallSelectionScreen from './screens/HallSelectionScreen/index';
 import MealtimeSelectionScreen from './screens/MealtimeSelectionScreen/index';
+import SignInScreen from './screens/SignInScreen/index';
 
 const Stack = createStackNavigator()
 
@@ -62,28 +63,23 @@ export default function App() {
     return <AppLoading />
   }
   return (
-    // <HallSelectionScreen day='24th' month='November' year='2020' meal='Lunch'></HallSelectionScreen>
-    // <MealtimeSelectionScreen day='24th' month='November' year='2020' meal='Lunch'></MealtimeSelectionScreen>
-    <NavigationContainer>
-      {/* <CalendarList/> */}
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false
-        }}
-        initialRouteName='TabScreen'
-      >
-        {/* <Stack.Screen name='FrontPage' component={HomeStackScreen}/> */}
-        {/* <Stack.Screen name='FrontPage' component={FrontPage}/>
-        <Stack.Screen name='CalendarScreen' component={Tabs}/> */}
-        <Stack.Screen name='TabScreen' component={Tabs}/>
-      </Stack.Navigator>
+    <SignInScreen/>
+    // <NavigationContainer>
+    //   <Stack.Navigator
+    //     screenOptions={{
+    //       headerShown: false
+    //     }}
+    //     initialRouteName='TabScreen'
+    //   >
+    //     <Stack.Screen name='TabScreen' component={Tabs}/>
+    //   </Stack.Navigator>
 
-    {/* <AuthContext.Provider
-      value={{ user, setUser, diningHalls}}
-    >
-     {!user ? <Auth /> : <FrontPage />}
-    </AuthContext.Provider> */}
-    </NavigationContainer>
+    // {/* <AuthContext.Provider
+    //   value={{ user, setUser, diningHalls}}
+    // >
+    //  {!user ? <Auth /> : <FrontPage />}
+    // </AuthContext.Provider> */}
+    // </NavigationContainer>
   );}
 
 
