@@ -10,6 +10,7 @@ function SignUpScreen({navigation}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     // const { setUser } = useContext(AuthContext);
+    const [confirmpassword, setConfirmpassword] = useState('');
 
     const submitHandler = () => {
         signup(email, password)
@@ -47,6 +48,8 @@ function SignUpScreen({navigation}) {
                 <TextInput
                     placeholder="Confirm password"
                     style={styles.input}
+                    value={confirmpassword}
+                    onChangeText={setConfirmpassword}
                     autoCorrect={false}
                     secureTextEntry={true}
                     autoCapitalize="none"
@@ -57,7 +60,10 @@ function SignUpScreen({navigation}) {
                     type="primary"
                     content={"Submit"}
                     onPress={() => {
-                    console.warn("Submit pressed")
+                        if (password != confirmpassword)
+                            console.warn("Passwords do not match")
+                        else
+                            console.warn("Valid submit")
                     // change to act as a signup
                     }}
                 />
