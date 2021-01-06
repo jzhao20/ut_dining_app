@@ -128,19 +128,20 @@ def get_dictionary(database, food):
     other_regex = re.compile('[0-9.]')
     for item in food.keys():
         name = item
-        if database[name] == None:
-            continue
-        else:
+        try:
             temp_data = database[name]
             for nuts in temp_data.keys():
+                key = nuts.strip()
                 if "Serving" not in nuts:
                     #get the values
-                    if data[nuts]!= None:
-                        number = float(regex.findall(temp_data[nuts])[0])*food[item]
-                        add = float(regex.findall(data[nuts])[0])+number
-                        data[nuts] = str(add)+other_regex.sub('',data[nuts])
-                    else:
-                        data.update({nuts:temp_data[nuts]})
+                    try:
+                        number = round(float(regex.findall(temp_data[nuts])[0])*food[item],1)
+                        add = round(float(regex.findall(data[key])[0])+number,1)
+                        data[key] = str(add)+other_regex.sub('',data[key])
+                    except:
+                        data.update({key:temp_data[nuts]})
+        except:
+            continue
     return data
 
 @app.route('/user/update_meal/', methods = ['POST'])
@@ -163,16 +164,21 @@ def update_meal():
     food = data["food"]
     dates = mongo.db.stored_dates
     database_to_read = dates.find_one({'date':cur_date})
-    if database_to_read == None or database_to_read.find_one({"dining_hall_and_meal":access_dict})==None:
+    if database_to_read == None:
         update_database(cur_date, dining_hall, meal_time)
         database_to_read = dates.find_one({'date':cur_date})
+    try:
+        database_to_read = database_to_read["data"]
+    except:
+        return "failed couldn't get dining hall and meal time"
+    f = lambda x: x["dining_hall_and_meal"]==access_dict
+    element = next((x for x in database_to_read if f(x)), None)
     #this is going to be the nut facts
-    database_to_read = database_to_read.find_one({"dining_hall_and_meal":access_dict})["menu"]
-    emails = mongo.db.user_profiles
-    if database == None:
-        return "profile not found"
-    #get all the nut facts to accumulate to the profile
+    if element == None:
+        return "data wasn't found"
+    database_to_read = element["menu"]
     data = get_dictionary(database_to_read, food)
+    emails = mongo.db.user_profiles
     database = emails.find_one({"email":email})
     counter = 0
     database_to_edit = None
@@ -193,7 +199,7 @@ def update_meal():
                 #stupid regex stuff
                 number = float(regex.findall(data[key])[0])
                 add = float(regex.findall(nut_facts[key])[0])
-                total = add+number
+                total = round(add+number,2)
                 nut_facts.update({key : str(total)+other_regex.sub('',nut_facts[key])})
         database["nut_facts"][counter] = {"date":cur_date, "data":nut_facts}
         emails.find_one_and_update({"email":email},{"$set":{"nut_facts":database["nut_facts"]}})
@@ -208,10 +214,10 @@ def update_meal_test():
     emails = mongo.db.user_profiles
     email = data["email"]
     try:
-    	cur_date = data["date"]
+        cur_date = data["date"]
     except:
-	    cur_date = date.today()
-	    cur_date = cur_date.strftime("%m/%d/%Y")
+        cur_date = date.today()
+        cur_date = cur_date.strftime("%m/%d/%Y")
     #cur_date is the ony date that can be updated
     #food contains a dicationary food item name and then the number of servings
     data = data["nut_facts"]
@@ -297,6 +303,7 @@ def classify():
 
 @app.route('/image/results', methods = ['POST'])
 def update_data():
+    training_data = "knn_data.npz"
     data = request.get_json()
     image = data["image"]
     answer = bool(data["classification"])
@@ -305,7 +312,7 @@ def update_data():
     file = open("classification_performance.txt", "w+")
     metadata = file.read()
     if metadata == "":
-        #file is empty and that means
+            #file is empty and that means
         metadata = str(int(answer)) +" 1 1"
     else:
         split = [int(num) for num in metadata.split(" ")]

@@ -88,7 +88,7 @@ def filter(args):
                     regex = re.compile('[^a-zA-Z\s]')
                     key =regex.sub('',key)
                     #remove anything that isn't a letter 
-                    ret.update({key:value})
+                    ret.update({key.strip():value})
     return ret
 
 
