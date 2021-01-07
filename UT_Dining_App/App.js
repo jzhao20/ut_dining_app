@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import FrontPage from './screens/FrontPage/index';
-import Auth from './screens/Auth/AuthStackNav';
+// import Auth from './screens/Auth/AuthStackNav';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {base_url} from './ngrok_code'
