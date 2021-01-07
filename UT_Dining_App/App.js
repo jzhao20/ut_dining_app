@@ -5,6 +5,7 @@ import FrontPage from './screens/FrontPage/index';
 import Auth from './screens/Auth/AuthStackNav';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import {base_url} from './ngrok_code'
 //import {getRealmApp} from "./getRealmApp";
 import {
   useFonts,
@@ -50,7 +51,7 @@ export default function App() {
   const [user, setUser] = React.useState(null);
   const [diningHalls, setDiningHalls] = React.useState(null);
   useEffect(()=>{
-  axios.get('http://5703ee1b9ecc.ngrok.io/halls/get').then((response)=>{
+  axios.get(base_url.concat('/halls/get')).then((response)=>{
     setDiningHall(response)
     }
   )
