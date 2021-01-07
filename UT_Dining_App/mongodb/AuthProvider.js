@@ -33,6 +33,9 @@ export const signUp = async (email, password) => {
     }).then((response)=>{
       //handle this in the front end
       set_message(response)
+      if (response == "added profile"){
+        setUser(email)
+      }
     });
   };
 
