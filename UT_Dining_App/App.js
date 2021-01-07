@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import FrontPage from './screens/FrontPage/index';
 import Auth from './screens/Auth/AuthStackNav';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-
+//import {getRealmApp} from "./getRealmApp";
 import {
   useFonts,
   BigShouldersDisplay_100Thin,
@@ -27,6 +27,8 @@ import MealtimeSelectionScreen from './screens/MealtimeSelectionScreen/index';
 import SignInScreen from './screens/SignInScreen/index';
 
 const Stack = createStackNavigator()
+//const app = useContext(getRealmApp());
+//const dining_hall_collection = app.collection2 
 
 const AuthContext = React.createContext({
   user:null,
@@ -50,8 +52,18 @@ export default function App() {
   const [user, setUser] = React.useState(null);
   const [diningHalls, setDiningHalls] = React.useState(null);
   const [meal_time, setMealTime] = React.useState("");
-  const [current_dining_hall, setDiningHall] = React.useState("");
+  const [current_dining_hall, setDiningHall] = React.useState([]);
   const [current_selections, setSelections] = React.useState(null);
+  useEffect(()=>{
+  axios.get('http://5703ee1b9ecc.ngrok.io/halls/get').then((response)=>{
+    setDiningHall(response)
+    }
+  )
+  },[]);
+  //useEffect(()=>
+  //{
+    //setDiningHall(dining_hall_collection.find()[0]);
+  //}, []);
   let [fontsLoaded] = useFonts({
     BigShouldersDisplay_100Thin,
     BigShouldersDisplay_300Light,
