@@ -1,87 +1,64 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { getRealmApp } from "../getRealmApp";
+import axios from 'axios';
+import {format} from 'react-string-format'
 
-// Access the Realm App.
-const app = useContext(getRealmApp());
-
+const base_url = http://5703ee1b9ecc.ngrok.io
 // Create a new Context object that will be provided to descendants of
 // the AuthProvider.
 const AuthContext = React.createContext({
-  user:"",
+  user_email:"",
+  message:""
 })
 
 export const signIn = async (email, password) => {
-    const [user, setUser] = React.useState("");
-    const check = {
-      "email":email,
-      "password":password,
-    };
-    await app.collection.findOne(check).then(result=>{
-      if(result){
-        setUser(result["email"])
-      }
-      else{
-        console.warn("incorrect password or the account isn't in use")
-      }
-    });
-  };
+  const[user_email, set_email] = useState("")
+  const[message, set_message] = useState("")
+  const url = format('http://5703ee1b9ecc.ngrok.io/login?email={0}&password={1}',email,password)
+  axios.get(url).then((response)=>{
+    if(response=="you've been successfully login in"){
+      set_email(email)
+    }
+    set_message(response)
+  })  
+};
 
   // The signUp function takes an email and password and uses the
   // emailPassword authentication provider to register the user.
 export const signUp = async (email, password) => {
-    const check  = {
+    const[message, set_message] = useState("")  
+    const url = base_url.concat("/user/create")
+    axios.post(url,{
       "email":email,
-    };
-    const profile = {
-      "$set":{
-        "email":email,
-        "password":password,
-        "description":"",
-        "picture":"",
-        "nut_facts":[],
-      }
-    };
-    await app.collection.findOne(check).then(result =>{
-      if (result){
-        console.warn("email already in use")
-      }
-      else{
-        app.collection.insertOne(profile)
-      }
+      "password":password
+    }).then((response)=>{
+      //handle this in the front end
+      set_message(response)
     });
-    signIn(email, password);
   };
 
   // The signOut function calls the logOut function on the currently
   // logged in user
 export const signOut = () => {
-  const [user, setUser] = React.useState("");
-    if (user == null) {
-      console.warn("Not logged in, can't log out!");
-      return;
-    }
-    setUser(null);
-  };
-export const updateProfile = async(description, base64_image) =>{
-    const check = {
-      "email":user,
-    }
-    const profile = {
-      "$set":{
-        "description":"",
-        "picture":"",
-      }
-    };
-    await app.collection.findOne(check).then(result=>{
-      result.updateOne(profile)
-    });
-  };
-export const get_nut = async(id) =>{
-    const check = {
-      "email":user,
-    }
-    await app.collection.findOne(check).then(result=>{
-      return result["nut_facts"]
-    })
+  const [user_email, set_email] = React.useState("");
+  const [message, set_message] = useState("");
+  if (user_email == null) {
+    set_message("Not logged in, can't log out!");
+    return;
   }
+  else{
+    set_message("Successfully logged out");
+  }
+  set_email("");
+  };
+export const updateProfile = async(description = "", base64_image = "") =>{
+  const[message, set_message] = useState("")
+  const url = base_url.concat('/user/update')
+  axios.post(url,{
+    "email":email,
+    "description":description,
+    "picture":base64_image
+  }).then((response)=>{
+    set_message(response)
+  });  
+}
  

@@ -278,9 +278,12 @@ def login():
     email = request.args["email"]
     password = request.args["password"]
     database = emails.find_one({"email":email})
-    if database != None and database["password"] == password:
+    if database is None:
+        return "email not found"
+    elif database["password"]!= password:
+        return "password is incorrect"
+    else:
         return "true"
-    return "false"
 
 @app.route('/user/create', methods = ['POST'])
 def create_user():
