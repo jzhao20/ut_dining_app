@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from './styles';
-import {SignUp} from '../../mongodb/AuthProvider';
+import {signUp} from '../../mongodb/AuthProvider';
 import StyledButton from '../../assets/StyledButton';
 
 function SignUpScreen({navigation}) {
@@ -77,4 +77,4 @@ function SignUpScreen({navigation}) {
     );
 };
 
-export default SignUpScreen;
+eixport default SignUpScreen;
