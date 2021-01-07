@@ -7,9 +7,6 @@ const user = useContext(AuthContext).user
 const{setUser} = useContext(AuthContext)
 // Create a new Context object that will be provided to descendants of
 // the AuthProvider.
-const AuthMessage = React.createContext({
-  message:""
-});
 
 export const signIn = async (email, password) => {
   const[message, set_message] = useState("")
@@ -18,7 +15,7 @@ export const signIn = async (email, password) => {
     if(response=="you've been successfully login in"){
       setUser(email)
     }
-    set_message(response)
+    return response;
   })  
 };
 
@@ -32,10 +29,10 @@ export const signUp = async (email, password) => {
       "password":password
     }).then((response)=>{
       //handle this in the front end
-      set_message(response)
       if (response == "added profile"){
         setUser(email)
       }
+      return response
     });
   };
 
@@ -60,7 +57,6 @@ export const updateProfile = async(description = "", base64_image = "") =>{
     "description":description,
     "picture":base64_image
   }).then((response)=>{
-    set_message(response)
+    return response;
   });  
 }
-export {AuthMessage}; 
