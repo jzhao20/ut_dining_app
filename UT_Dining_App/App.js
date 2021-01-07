@@ -31,9 +31,9 @@ const Stack = createStackNavigator()
 const AuthContext = React.createContext({
   user:null,
   diningHalls:[],
-  setUser:null,
-  properties:[],
-  setProperties:null,
+  meal_time:"",
+  current_dining_hall:"",
+  current_selections:{},
 })
 
 // const HomeStack = createStackNavigator()
@@ -49,6 +49,9 @@ const AuthContext = React.createContext({
 export default function App() {
   const [user, setUser] = React.useState(null);
   const [diningHalls, setDiningHalls] = React.useState(null);
+  const [meal_time, setMealTime] = React.useState("");
+  const [current_dining_hall, setDiningHall] = React.useState("");
+  const [current_selections, setSelections] = React.useState(null);
   let [fontsLoaded] = useFonts({
     BigShouldersDisplay_100Thin,
     BigShouldersDisplay_300Light,
@@ -63,23 +66,23 @@ export default function App() {
     return <AppLoading />
   }
   return (
-    <SignInScreen/>
-    // <NavigationContainer>
-    //   <Stack.Navigator
-    //     screenOptions={{
-    //       headerShown: false
-    //     }}
-    //     initialRouteName='TabScreen'
-    //   >
-    //     <Stack.Screen name='TabScreen' component={Tabs}/>
-    //   </Stack.Navigator>
+    // <SignInScreen/>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+        initialRouteName='TabScreen'
+      >
+        <Stack.Screen name='TabScreen' component={Tabs}/>
+      </Stack.Navigator>
 
-    // {/* <AuthContext.Provider
-    //   value={{ user, setUser, diningHalls}}
-    // >
-    //  {!user ? <Auth /> : <FrontPage />}
-    // </AuthContext.Provider> */}
-    // </NavigationContainer>
+    {/* <AuthContext.Provider
+      value={{ user, setUser, diningHalls}}
+    >
+     {!user ? <Auth /> : <FrontPage />}
+    </AuthContext.Provider> */}
+    </NavigationContainer>
   );}
 
 

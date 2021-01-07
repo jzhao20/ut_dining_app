@@ -3,8 +3,9 @@ import React from "react";
 const databaseContext = React.createContext({
   app:null,
   collection:null,
+  currentUser:null,
 })
-let app;
+
 
 // Returns the shared instance of the Realm app.
 export function getRealmApp() {

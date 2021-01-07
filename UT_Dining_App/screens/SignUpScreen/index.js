@@ -6,33 +6,31 @@ import styles from './styles';
 
 import StyledButton from '../../assets/StyledButton';
 
-function SignInScreen({navigation}) {
+function SignUpScreen({navigation}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     // const { setUser } = useContext(AuthContext);
+    const [confirmpassword, setConfirmpassword] = useState('');
 
-    const loginHandler = () => {
-        login(email, password)
-          .then((user) => {
-            getUser(user.user.uid).then((res) => {
-              setUser({ uid: user.user.uid, ...res });
-            });
+    const submitHandler = () => {
+        signup(email, password)
+          .then((res) => {
+            navigation.navigate('Setup', { uid: res.user.uid });
           })
           .catch((err) => {
             alert(err);
           });
-      };
+    };
 
     return (
         <SafeAreaView>
             <View style={styles.container}>
                 <Text style={styles.login}>
-                    Login
+                    Sign Up
                 </Text>
                 <TextInput
                     placeholder="Email"
                     style={styles.input}
-                    // placeholderTextColor={Theme.colors.gray1}
                     value={email}
                     onChangeText={setEmail}
                     autoCorrect={false}
@@ -41,9 +39,17 @@ function SignInScreen({navigation}) {
                 <TextInput
                     placeholder="Password"
                     style={styles.input}
-                    // placeholderTextColor={Theme.colors.gray1}
                     value={password}
                     onChangeText={setPassword}
+                    autoCorrect={false}
+                    secureTextEntry={true}
+                    autoCapitalize="none"
+                />
+                <TextInput
+                    placeholder="Confirm password"
+                    style={styles.input}
+                    value={confirmpassword}
+                    onChangeText={setConfirmpassword}
                     autoCorrect={false}
                     secureTextEntry={true}
                     autoCapitalize="none"
@@ -54,22 +60,24 @@ function SignInScreen({navigation}) {
                     type="primary"
                     content={"Submit"}
                     onPress={() => {
-                    console.warn("Submit pressed")
-                    // change to act as a signin
+                        if (password != confirmpassword)
+                            console.warn("Passwords do not match")
+                        else
+                            console.warn("Valid submit")
+                    // change to act as a signup
                     }}
                 />
                 </View>
                 
                 <TouchableOpacity>
-                    <Text style={styles.signupText} onPress={() => navigation.navigate('SignUpScreen')}>
-                        Don't have an account?
+                    <Text style={styles.signupText} onPress={() => navigation.navigate('SignInScreen')}>
+                        Already have an account?
                     </Text>
                 </TouchableOpacity>
                 
-
             </View>
         </SafeAreaView>
     );
 };
 
-export default SignInScreen;
+export default SignUpScreen;
