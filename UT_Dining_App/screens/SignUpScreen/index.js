@@ -77,4 +77,4 @@ function SignUpScreen({navigation}) {
     );
 };
 
-eixport default SignUpScreen;
+export default SignUpScreen;
