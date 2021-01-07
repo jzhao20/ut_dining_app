@@ -34,12 +34,6 @@ const AuthContext = React.createContext({
   user:null,
   setUser: null,
   diningHalls:[],
-  meal_time:"",
-  current_dining_hall:"",
-  current_selections:{},
-  setSelections:null,
-  setDiningHall:null,
-  setMealTime:null
 })
 
 // const HomeStack = createStackNavigator()
@@ -55,9 +49,6 @@ const AuthContext = React.createContext({
 export default function App() {
   const [user, setUser] = React.useState(null);
   const [diningHalls, setDiningHalls] = React.useState(null);
-  const [meal_time, setMealTime] = React.useState("");
-  const [current_dining_hall, setDiningHall] = React.useState([]);
-  const [current_selections, setSelections] = React.useState(null);
   useEffect(()=>{
   axios.get('http://5703ee1b9ecc.ngrok.io/halls/get').then((response)=>{
     setDiningHall(response)
