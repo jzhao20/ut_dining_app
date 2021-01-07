@@ -10,7 +10,7 @@ const{setUser} = useContext(AuthContext)
 
 export const signIn = async (email, password) => {
   const[message, set_message] = useState("")
-  const url = base_url.concat(format('?email={0}&password={1}',email,password))
+  const url = base_url.concat(format('/login/?email={0}&password={1}',email,password))
   axios.get(url).then((response)=>{
     if(response=="you've been successfully login in"){
       setUser(email)
@@ -59,4 +59,10 @@ export const updateProfile = async(description = "", base64_image = "") =>{
   }).then((response)=>{
     return response;
   });  
+}
+export const getProfile = async()=>{
+  const url = base_url.concat(format('/user/get/?email={0}',{user}))
+  axios.get(url).then((response)=>{
+    return response;
+  })
 }
