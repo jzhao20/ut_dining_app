@@ -3,23 +3,20 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from './styles';
-
+import {SignUp} from '../../mongodb/AuthProvider';
 import StyledButton from '../../assets/StyledButton';
 
 function SignUpScreen({navigation}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [display_message, setMessage] = useState('');
     // const { setUser } = useContext(AuthContext);
     const [confirmpassword, setConfirmpassword] = useState('');
-
     const submitHandler = () => {
-        signup(email, password)
+        SignUp(email, password)
           .then((res) => {
-            navigation.navigate('Setup', { uid: res.user.uid });
+              setMessage(res)
           })
-          .catch((err) => {
-            alert(err);
-          });
     };
 
     return (
