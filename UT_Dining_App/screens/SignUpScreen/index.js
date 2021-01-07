@@ -13,7 +13,7 @@ function SignUpScreen({navigation}) {
     // const { setUser } = useContext(AuthContext);
     const [confirmpassword, setConfirmpassword] = useState('');
     const submitHandler = () => {
-        SignUp(email, password)
+        signUp(email, password)
           .then((res) => {
               setMessage(res)
           })
