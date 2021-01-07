@@ -7,8 +7,7 @@ import {base_url} from '../ngrok_code'
 // the AuthProvider.
 
 export const signIn = async (email, password) => {
-const user = useContext(AuthContext).user
-const{setUser} = useContext(AuthContext)
+  const{setUser} = useContext(AuthContext)
   const url = base_url.concat(format('/login/?email={0}&password={1}',email,password))
   axios.get(url).then((response)=>{
     if(response=="you've been successfully login in"){
@@ -21,7 +20,6 @@ const{setUser} = useContext(AuthContext)
   // The signUp function takes an email and password and uses the
   // emailPassword authentication provider to register the user.
 export const signUp = async (email, password) => {
-  const user = useContext(AuthContext).user
   const{setUser} = useContext(AuthContext)
     const url = base_url.concat("/user/create")
     axios.post(url,{
@@ -52,7 +50,6 @@ export const signOut = () => {
   };
 export const updateProfile = async(description = "", base64_image = "") =>{
   const user = useContext(AuthContext).user
-  const{setUser} = useContext(AuthContext)
   const url = base_url.concat('/user/update')
   axios.post(url,{
     "email":user,
@@ -64,7 +61,6 @@ export const updateProfile = async(description = "", base64_image = "") =>{
 }
 export const getProfile = async()=>{
   const user = useContext(AuthContext).user
-  const{setUser} = useContext(AuthContext)
   const url = base_url.concat(format('/user/get/?email={0}',{user}))
   axios.get(url).then((response)=>{
     return response;
