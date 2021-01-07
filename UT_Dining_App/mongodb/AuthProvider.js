@@ -1,22 +1,22 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import axios from 'axios';
 import {format} from 'react-string-format'
-
+import {AuthContext} from '../App'
+const user = useContext(AuthContext).user
+const{setUser} = useContext(AuthContext)
 const base_url = "http://5703ee1b9ecc.ngrok.io"
 // Create a new Context object that will be provided to descendants of
 // the AuthProvider.
-const AuthContext = React.createContext({
-  user_email:"",
+const AuthMessage = React.createContext({
   message:""
 });
 
 export const signIn = async (email, password) => {
-  const[user_email, set_email] = useState("")
   const[message, set_message] = useState("")
   const url = base_url.concat(format('?email={0}&password={1}',email,password))
   axios.get(url).then((response)=>{
     if(response=="you've been successfully login in"){
-      set_email(email)
+      setUser(email)
     }
     set_message(response)
   })  
@@ -39,26 +39,25 @@ export const signUp = async (email, password) => {
   // The signOut function calls the logOut function on the currently
   // logged in user
 export const signOut = () => {
-  const [user_email, set_email] = React.useState("");
   const [message, set_message] = useState("");
-  if (user_email == null) {
+  if (user == null) {
     set_message("Not logged in, can't log out!");
     return;
   }
   else{
     set_message("Successfully logged out");
   }
-  set_email("");
+  setUser("");
   };
 export const updateProfile = async(description = "", base64_image = "") =>{
   const[message, set_message] = useState("")
   const url = base_url.concat('/user/update')
   axios.post(url,{
-    "email":email,
+    "email":user,
     "description":description,
     "picture":base64_image
   }).then((response)=>{
     set_message(response)
   });  
 }
- 
+export {AuthMessage}; 

@@ -32,10 +32,14 @@ const Stack = createStackNavigator()
 
 const AuthContext = React.createContext({
   user:null,
+  setUser: null,
   diningHalls:[],
   meal_time:"",
   current_dining_hall:"",
   current_selections:{},
+  setSelections:null,
+  setDiningHall:null,
+  setMealTime:null
 })
 
 // const HomeStack = createStackNavigator()
@@ -96,7 +100,7 @@ export default function App() {
     </AuthContext.Provider> */}
     </NavigationContainer>
   );}
-
+export {AuthContext};
 
 const styles = StyleSheet.create({
   container: {
