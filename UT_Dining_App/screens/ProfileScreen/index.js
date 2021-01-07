@@ -6,9 +6,9 @@ const user_profile = React.createContext({
   meal_time:"",
   current_dining_hall:"",
   current_selections:{},
-  setSelections:null,
+  setMealTime:null,
   setDiningHall:null,
-  setMealTime:null
+  setSelections:null
 })  
 
 export default function ProfileScreen(props) {
