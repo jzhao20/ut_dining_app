@@ -9,7 +9,6 @@ const{setUser} = useContext(AuthContext)
 // the AuthProvider.
 
 export const signIn = async (email, password) => {
-  const[message, set_message] = useState("")
   const url = base_url.concat(format('/login/?email={0}&password={1}',email,password))
   axios.get(url).then((response)=>{
     if(response=="you've been successfully login in"){
@@ -22,7 +21,6 @@ export const signIn = async (email, password) => {
   // The signUp function takes an email and password and uses the
   // emailPassword authentication provider to register the user.
 export const signUp = async (email, password) => {
-    const[message, set_message] = useState("")  
     const url = base_url.concat("/user/create")
     axios.post(url,{
       "email":email,
@@ -39,7 +37,6 @@ export const signUp = async (email, password) => {
   // The signOut function calls the logOut function on the currently
   // logged in user
 export const signOut = () => {
-  const [message, set_message] = useState("");
   if (user == null) {
     set_message("Not logged in, can't log out!");
     return;
@@ -50,7 +47,6 @@ export const signOut = () => {
   setUser("");
   };
 export const updateProfile = async(description = "", base64_image = "") =>{
-  const[message, set_message] = useState("")
   const url = base_url.concat('/user/update')
   axios.post(url,{
     "email":user,
@@ -64,5 +60,5 @@ export const getProfile = async()=>{
   const url = base_url.concat(format('/user/get/?email={0}',{user}))
   axios.get(url).then((response)=>{
     return response;
-  })
+  });
 }
