@@ -2,13 +2,13 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import axios from 'axios';
 import {format} from 'react-string-format'
 
-const base_url = http://5703ee1b9ecc.ngrok.io
+const base_url = "http://5703ee1b9ecc.ngrok.io"
 // Create a new Context object that will be provided to descendants of
 // the AuthProvider.
 const AuthContext = React.createContext({
   user_email:"",
   message:""
-})
+});
 
 export const signIn = async (email, password) => {
   const[user_email, set_email] = useState("")
