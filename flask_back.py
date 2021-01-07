@@ -126,12 +126,8 @@ def update_profile():
         #this can't happens since the user it always asking just for debugging purposes
         return "profile not found"
     else:
-        if description == None and profile_picture == None:
-            return "can't change email"
-        if description == None:
-            description = database["description"]
-        if profile_picture == None:
-            profile_picture = database["picture"]
+        if description == database["description"] and profile_picture == database["picture"]:
+            return "please edit profile or click cancel"
         emails.update_one(database,{"$set":{"description":description,"picture":profile_picture}})
     return "updated profile"
 
@@ -283,7 +279,7 @@ def login():
     elif database["password"]!= password:
         return "password is incorrect"
     else:
-        return "true"
+        return "you've been successfully logged in"
 
 @app.route('/user/create', methods = ['POST'])
 def create_user():
@@ -301,12 +297,10 @@ def create_user():
         profile_picture = data["picture"]
     except:
         profile_picture = ""
-    if emails.find_one({"email":email}):
-        return "profile already in use"
     else:
         #add the stuff to it
         emails.insert_one({'email':email,"password":password,"description":description,"picture":profile_picture, "nut_facts":[]})
-        return "added profile"
+        return "added profile logging you in"
 
 @app.route('/image/classify', methods = ['POST'])
 def classify():
