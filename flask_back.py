@@ -101,7 +101,7 @@ def user_profile():
 
 @app.route('/user/get_nut/', methods = ['GET'])
 def get_nutrition_facts():
-    data = rqeuest.args
+    data = request.args
     email = data["email"]
     date_of_interest = data["date"]
     emails = mongo.db.user_profiles
