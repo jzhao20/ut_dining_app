@@ -32,7 +32,7 @@ const Stack = createStackNavigator()
 //const dining_hall_collection = app.collection2 
 
 const AuthContext = React.createContext({
-  user:null,
+  user:"",
   setUser: null,
   diningHalls:[],
 })
@@ -48,13 +48,14 @@ const AuthContext = React.createContext({
 // }
 
 export default function App() {
-  const [user, setUser] = React.useState(null);
+  const [user, setUser] = React.useState("");
   const [diningHalls, setDiningHalls] = React.useState(null);
   useEffect(()=>{
-  axios.get(base_url.concat('/halls/get')).then((response)=>{
-    setDiningHall(response)
-    }
-  )
+    axios.get(base_url.concat('/halls/get')).then((response)=>{
+      console.warn(response["data"])
+      setDiningHalls(response["data"])
+      }
+    )
   },[]);
   //useEffect(()=>
   //{

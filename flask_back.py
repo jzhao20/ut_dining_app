@@ -13,19 +13,24 @@ mongo = PyMongo(app)
 
 @app.route('/halls/get', methods = ['GET'])
 def get_halls():
-	if request.args["force"] == "True":
-		val = json.dumps(scrape.get_dining_halls())
-		database = mongo.db.dining_halls
-		database_to_edit = database.find()
-		try:
-			database.update_one(database_to_edit[0], {"$set":{"dining_halls":val}})
-		except:
-			print("here")
-			database.insert_one({"dining_halls":val})
-		return val
-	else:
-		database = mongo.db.dining_halls
-		return database.find()[0]["dining_halls"]
+    try:
+        request.args["force"]
+    except:
+        database = mongo.db.dining_halls
+        return database.find()[0]["dining_halls"]
+    if request.args["force"] == "True":
+        val = json.dumps(scrape.get_dining_halls())
+        database = mongo.db.dining_halls
+        database_to_edit = database.find()
+        try:
+            database.update_one(database_to_edit[0], {"$set":{"dining_halls":val}})
+        except:
+            print("here")
+            database.insert_one({"dining_halls":val})
+        return val
+    else:
+        database = mongo.db.dining_halls
+        return database.find()[0]["dining_halls"]
 
 
 def update_database(date_specified, dining_hall, meal_time):

@@ -3,24 +3,17 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from './styles';
-
+import {signIn} from '../../mongodb/AuthProvider';
 import StyledButton from '../../assets/StyledButton';
 
 function SignInScreen({navigation}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    // const { setUser } = useContext(AuthContext);
-
-    const loginHandler = () => {
-        login(email, password)
-          .then((user) => {
-            getUser(user.user.uid).then((res) => {
-              setUser({ uid: user.user.uid, ...res });
-            });
-          })
-          .catch((err) => {
-            alert(err);
-          });
+    const [display_message , setMessage] = useState('');
+    const loginHandler = async() => {
+        signIn(email, password).then((res)=>{
+            console.warn(res)
+        })
       };
 
     return (
@@ -53,10 +46,7 @@ function SignInScreen({navigation}) {
                 <StyledButton
                     type="primary"
                     content={"Submit"}
-                    onPress={() => {
-                    console.warn("Submit pressed")
-                    // change to act as a signin
-                    }}
+                    onPress={ loginHandler}
                 />
                 </View>
                 
