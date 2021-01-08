@@ -78,7 +78,7 @@ def get_item():
     database_to_read = dates.find_one({'date':date})
     if database_to_read == None or database_to_read.find_one({"dining_hall_and_meal":access_dict})==None:
         update_database(date, dining_hall, meal_time)
-        database_to_read = dates.find_one({'date':cur_date})
+        database_to_read = dates.find_one({'date':date})
     database_to_read = database_to_read.find_one({"dining_hall_and_meal":access_dict})["menu"]
     try:
         return database_to_read[food]
@@ -311,7 +311,7 @@ def create_user():
 def classify():
     data = request.get_json()
     image = data["image"]
-    if images == None:
+    if image == None:
         return "not enough training data"
     else:
         return image_classification.classify(image)
@@ -345,7 +345,7 @@ def update_data():
             file.write(" ".join(split))
     images = mongo.db.food_images
     if not os.path.exists(training_data):
-        image_classification(image, answer, images)
+        image_classification.update_training(image, answer, images)
     else:
         image_classification.update_training(image, answer)
     images.insert_one({"name":answer, "base64": image_classification.process_images(image)})

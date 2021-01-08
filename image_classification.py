@@ -1,3 +1,4 @@
+import base64
 import cv2 as cv
 import numpy as np
 import os
@@ -16,7 +17,7 @@ def classify(image):
         train = data['train']
         labels = data['train_labels']
         knn = cv.m1.KNearest_create()
-        knn.train(training_data, cv.m1.ROW_SAMPLE, train_labels)
+        knn.train(train, cv.m1.ROW_SAMPLE, labels)
         ret, result, neighbours, dist = knn.findNearest(process_images(image))
         return result
     return "file doesn't exist"
@@ -32,7 +33,7 @@ def update_training(image, type, load = None):
             for i in load:
                 train.append(i["base64"])
                 label.append(i["name"])
-            np.savez(training_data, train = train, train_labels = labels)
+            np.savez(training_data, train = train, train_labels = label)
     with np.load(training_data)as data:
         train = data['train'].append(process_images(image))
         labels = data['train_labels']
