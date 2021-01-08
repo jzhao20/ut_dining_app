@@ -26,6 +26,7 @@ import Tabs from './navigation/tabs';
 import HallSelectionScreen from './screens/HallSelectionScreen/index';
 import MealtimeSelectionScreen from './screens/MealtimeSelectionScreen/index';
 import SignInScreen from './screens/SignInScreen/index';
+import ProfileScreen from './screens/ProfileScreen/index';
 
 const Stack = createStackNavigator()
 //const app = useContext(getRealmApp());
@@ -75,23 +76,24 @@ export default function App() {
     return <AppLoading />
   }
   return (
+    <ProfileScreen/>
     // <SignInScreen/>
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false
-        }}
-        initialRouteName='TabScreen'
-      >
-        <Stack.Screen name='TabScreen' component={Tabs}/>
-      </Stack.Navigator>
+    // <NavigationContainer>
+    //   <Stack.Navigator
+    //     screenOptions={{
+    //       headerShown: false
+    //     }}
+    //     initialRouteName='TabScreen'
+    //   >
+    //     <Stack.Screen name='TabScreen' component={Tabs}/>
+    //   </Stack.Navigator>
 
-    {/* <AuthContext.Provider
-      value={{ user, setUser, diningHalls}}
-    >
-     {!user ? <Auth /> : <FrontPage />}
-    </AuthContext.Provider> */}
-    </NavigationContainer>
+    // {/* <AuthContext.Provider
+    //   value={{ user, setUser, diningHalls}}
+    // >
+    //  {!user ? <Auth /> : <FrontPage />}
+    // </AuthContext.Provider> */}
+    // </NavigationContainer>
   );}
 export {AuthContext};
 
