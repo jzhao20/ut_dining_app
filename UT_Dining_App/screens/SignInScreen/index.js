@@ -5,16 +5,14 @@ import { TextInput } from 'react-native-gesture-handler';
 import styles from './styles';
 import {signIn} from '../../mongodb/AuthProvider';
 import StyledButton from '../../assets/StyledButton';
-
 function SignInScreen({navigation}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [display_message , setMessage] = useState('');
     const loginHandler = async() => {
-        signIn(email, password).then((res)=>{
-            console.warn(res)
-        })
-      };
+        const val = await(signIn(email, password))
+        console.warn(val.toString())
+    };
 
     return (
         <SafeAreaView>
@@ -51,7 +49,7 @@ function SignInScreen({navigation}) {
                 </View>
                 
                 <TouchableOpacity>
-                    <Text style={styles.signupText} onPress={() => navigation.navigate('SignUpScreen')}>
+                    <Text style={styles.signupText} onPress={() => {navigation.navigate('SignUpScreen')}}>
                         Don't have an account?
                     </Text>
                 </TouchableOpacity>

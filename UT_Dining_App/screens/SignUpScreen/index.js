@@ -12,11 +12,10 @@ function SignUpScreen({navigation}) {
     const [display_message, setMessage] = useState('');
     // const { setUser } = useContext(AuthContext);
     const [confirmpassword, setConfirmpassword] = useState('');
-    const submitHandler = () => {
-        signUp(email, password)
-          .then((res) => {
-              setMessage(res)
-          })
+    const submitHandler = async() => {
+        //console.warn("hello there")
+        const val = await(signUp(email, password))
+        console.warn(val)
     };
 
     return (
@@ -60,7 +59,7 @@ function SignUpScreen({navigation}) {
                         if (password != confirmpassword)
                             console.warn("Passwords do not match")
                         else
-                            console.warn("Valid submit")
+                            submitHandler()
                     // change to act as a signup
                     }}
                 />
