@@ -5,17 +5,24 @@ import { TextInput } from 'react-native-gesture-handler';
 import styles from './styles';
 import {signUp} from '../../mongodb/AuthProvider';
 import StyledButton from '../../assets/StyledButton';
-
+import {AuthContext} from '../../App'
+const display_text = React.createContext({
+    display_message:""
+})
 function SignUpScreen({navigation}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [display_message, setMessage] = useState('');
-    // const { setUser } = useContext(AuthContext);
+    const { setUser } = useContext(AuthContext);
     const [confirmpassword, setConfirmpassword] = useState('');
     const submitHandler = async() => {
         //console.warn("hello there")
         const val = await(signUp(email, password))
         console.warn(val)
+        if (val.toString() == "added profile logging you in"){
+            setUser(email)
+        }
+        setMessage(val.toString())
     };
 
     return (
@@ -70,6 +77,7 @@ function SignUpScreen({navigation}) {
                         Already have an account?
                     </Text>
                 </TouchableOpacity>
+                <Text>{display_message}</Text>
                 
             </View>
         </SafeAreaView>
