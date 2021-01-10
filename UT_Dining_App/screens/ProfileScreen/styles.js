@@ -34,6 +34,17 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
 
+    descriptionBox: {
+        color:'gray', 
+        marginLeft: 20,
+        marginRight: 20,
+        width: '80%',
+        height: '100%',
+        fontSize: 18,
+        borderWidth: 1,
+        borderColor: '#f2f2f2'
+    },
+
     input: {
         // backgroundColor: '#5c5e62',
         // backgroundColor: '#d3d3d3',

@@ -20,10 +20,10 @@ const user_profile = React.createContext({
 export default function ProfileScreen(props) {
     const [meal_time, setMealTime] = React.useState("")
     const [current_dining_hall, setDiningHall] = React.useState("")
-    const [current_selections, setSelections] = React.useState("asdf")
+    const [current_selections, setSelections] = React.useState("")
 
 
-    const [tempValue, setTempValue] = React.useState("")
+    const [tempValue, setTempValue] = React.useState("asdf testSuper long test description placeholder perhapsasdflaksjdfl;kasjdfl;kajsdfl;kjsdlkf alskdjflsakjdf asdlfkjsldkf")
 
     return (
         <SafeAreaView>
@@ -46,11 +46,18 @@ export default function ProfileScreen(props) {
                     </View>
                     <View style={styles.row}>
                         <Icon name='inbox' color = 'gray' size={30}/>
-                        <Text style={styles.iconText}>
+                        {/* <Text style={styles.iconText}>
                             Super long test description placeholder perhaps
                             asdflaksjdfl;kasjdfl;kajsdfl;kjsdlkf alskdjflsakjdf 
                             asdlfkjsldkf
-                        </Text>
+                        </Text> */}
+                        <TextInput
+                            style={styles.descriptionBox}
+                            value={tempValue}
+                            onChangeText={setTempValue}
+                            multiline={true}
+                            maxLength={100}
+                        />
                     </View>
                 </View>
                 
