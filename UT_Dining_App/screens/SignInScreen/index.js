@@ -4,22 +4,28 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from './styles';
 import {AuthContext} from '../../App'
-import {signIn} from '../../mongodb/AuthProvider';
+import {signIn, getProfile} from '../../mongodb/AuthProvider';
 import StyledButton from '../../assets/StyledButton';
+import {format} from 'react-string-format'
 const display_text = React.createContext({
     display_message:""
 })
 function SignInScreen({navigation}) {
     const {setUser} = useContext(AuthContext)
+    const {setDescription} = useContext(AuthContext)
+    const {setImage} = useContext(AuthContext)
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [display_message , setMessage] = useState('');
     const loginHandler = async() => {
         const val = await(signIn(email, password))
-        console.warn(val.toString())
         if(val.toString() == "you've been successfully logged in"){
             console.warn("successfully loged in")
+            const res = await getProfile(email)
             setUser(email)
+            setDescription(res["description"])
+            const img = format('data:image/png;base64,{0}',res['picture'])
+            setImage(img)
         }
         setMessage(val.toString())
     };

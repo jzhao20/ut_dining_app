@@ -37,20 +37,17 @@ export const signOut = () => {
   }
   setUser("");
   };
-export const updateProfile = async(description = "", base64_image = "") =>{
-  const user = useContext(AuthContext).user
+export const updateProfile = async(description = "", base64_image = "", email) =>{
   const url = base_url.concat('/user/update')
-  await axios.post(url,{
-    "email":user,
+  const message = await axios.post(url,{
+    "email":email,
     "description":description,
     "picture":base64_image
-  }).then((response)=>{
-    return response;
-  });  
+  })    
+  return message["data"].toString()  
 }
 export const getProfile = async(email)=>{
   const url = base_url.concat(format('/user/get/?email={0}',email))
   const val = await axios.get(url)
-  console.warn(val["data"])
   return val["data"]
 }

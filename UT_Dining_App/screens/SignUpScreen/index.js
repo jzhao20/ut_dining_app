@@ -14,6 +14,8 @@ function SignUpScreen({navigation}) {
     const [password, setPassword] = useState('');
     const [display_message, setMessage] = useState('');
     const { setUser } = useContext(AuthContext);
+    const {setDescription} = useContext(AuthContext);
+    const {setImage} = useContext(AuthContext);
     const [confirmpassword, setConfirmpassword] = useState('');
     const submitHandler = async() => {
         //console.warn("hello there")
@@ -21,6 +23,8 @@ function SignUpScreen({navigation}) {
         console.warn(val)
         if (val.toString() == "added profile logging you in"){
             setUser(email)
+            setDescription("")
+            setImage("")
         }
         setMessage(val.toString())
     };

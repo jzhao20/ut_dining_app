@@ -17,29 +17,21 @@ const user_profile = React.createContext({
   setMealTime:null,
   setDiningHall:null,
   setSelections:null,
+  email:"",
+  description:"",
+  image:""
 })  
 
-export default function ProfileScreen (props){
-    const user = useContext(AuthContext).user
+export default function ProfileScreen ({navigation}){
+    const {user} = useContext(AuthContext)
+    const {description} = useContext(AuthContext)
+    const {image} = useContext(AuthContext)
+    console.warn("Image:"+image)
     const [state, setState] = React.useState(false)
     const [meal_time, setMealTime] = React.useState("")
     const [current_dining_hall, setDiningHall] = React.useState("")
     const [current_selections, setSelections] = React.useState("")
-    const [email, setEmail] = React.useState()
-    const [description, setDescription] = React.useState("")
-    const [image, setImage] = React.useState("")
     const [tempValue, setTempValue] = React.useState("")
-    const get_info = async() =>{
-        const res = await getProfile(user)
-        setEmail(user)
-        setDescription(res["description"])
-        setImage(format('data:image/png;base64,{0}',res["picture"]))
-        setState(true)
-        }
-    if(!state){
-        get_info()
-        console.warn("image: "+image)
-    }
     return (
         <SafeAreaView>
             <View style={styles.container}>
@@ -53,7 +45,7 @@ export default function ProfileScreen (props){
                 <View style={styles.userInfoSection}>
                     <View style={styles.row}>
                         <Icon name='email' color = 'gray' size={30}/>
-                        <Text style={styles.iconText}>{email}</Text>
+                        <Text style={styles.iconText}>{user}</Text>
                     </View>
                     <View style={styles.row}>
                         <Icon name='alpha-d-box-outline' color = 'gray' size={30}/>
@@ -63,13 +55,20 @@ export default function ProfileScreen (props){
                     </View>
                     <View style = {styles.row}>
                         <Image style={{
+                            width:200,
+                            height:200,
                             resizeMode: 'cover'
                         }}
-                        source={image!=""?
-                            {uri: image}:null
+                        source={
+                            {uri: image}
                         }/>
                     </View>
                 </View>
+                <TouchableOpacity>
+                    <Text style = {styles.signupText}onPress={()=>{navigation.navigate('edit profile')}}>
+                        Edit Profile 
+                    </Text>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     );

@@ -37,6 +37,10 @@ const AuthContext = React.createContext({
   user:"",
   setUser: null,
   diningHalls:[],
+  description:"",
+  setDescription:null,
+  image:"",
+  setImage:null
 })
 
 // const HomeStack = createStackNavigator()
@@ -51,6 +55,8 @@ const AuthContext = React.createContext({
 
 export default function App() {
   const [user, setUser] = React.useState("");
+  const [description, setDescription] = React.useState("")
+  const [image, setImage] = React.useState("")
   const [diningHalls, setDiningHalls] = React.useState(null);
   useEffect(()=>{
     axios.get(base_url.concat('/halls/get')).then((response)=>{
@@ -77,7 +83,7 @@ export default function App() {
     return <AppLoading />
   }
   return (
-    <AuthContext.Provider value = {{user, setUser, diningHalls}}>
+    <AuthContext.Provider value = {{user, setUser, description, setDescription, image, setImage, diningHalls}}>
       <NavigationContainer>{!user ? <AuthStackNav/> : <Home/>}</NavigationContainer>
     </AuthContext.Provider>
     // <SignInScreen/>

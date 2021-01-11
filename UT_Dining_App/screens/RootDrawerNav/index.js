@@ -2,7 +2,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import React from 'react'
 import Home from '../HomeStackNav/index'
 import AuthStackNav from '../AuthStackNav/index';
-import Profile from '../ProfileScreen/index'
+import Profile from '../ProfileNav/index'
 const Drawer = createDrawerNavigator();
 export default function RootDrawerNav(){
     return(
