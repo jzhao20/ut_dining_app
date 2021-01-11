@@ -29,6 +29,7 @@ import SignInScreen from './screens/SignInScreen/index';
 import ProfileScreen from './screens/ProfileScreen/index';
 import SignUpScreen from './screens/SignUpScreen/index';
 import AuthStackNav from './screens/AuthStackNav/index'
+import Home from './screens/RootDrawerNav';
 //const app = useContext(getRealmApp());
 //const dining_hall_collection = app.collection2 
 
@@ -77,7 +78,7 @@ export default function App() {
   }
   return (
     <AuthContext.Provider value = {{user, setUser, diningHalls}}>
-      <NavigationContainer>{!user ? <AuthStackNav/> : <CalendarScreen/>}</NavigationContainer>
+      <NavigationContainer>{!user ? <AuthStackNav/> : <Home/>}</NavigationContainer>
     </AuthContext.Provider>
     // <SignInScreen/>
     // <NavigationContainer>

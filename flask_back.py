@@ -322,7 +322,6 @@ def update_data():
     data = request.get_json()
     image = data["image"]
     answer = bool(data["classification"])
-    correct = data["correct"]
     #update the file and check if greater than 90% at which point don't update it unless you got it wrong
     file = open("classification_performance.txt", "w+")
     metadata = file.read()
