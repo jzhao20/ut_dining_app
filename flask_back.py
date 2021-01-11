@@ -84,7 +84,6 @@ def get_item():
         return database_to_read[food]
     except:
         return "item doesn't exist"
-
 @app.route('/user/get/', methods = ['GET'])
 def user_profile():
     email = request.args["email"]
@@ -93,12 +92,10 @@ def user_profile():
     if database != None:
         description = database["description"]
         picture = database["picture"]
-        nutrition = database["nut_facts"]
-        return {"email":email,"description":description,"picture":picture,"nut_facts":nutrition}
+        return {"description":description,"picture":picture}
     else:
         #can't happen only used for debugging purposes
         return "profile doesn't exist"
-
 @app.route('/user/get_nut/', methods = ['GET'])
 def get_nutrition_facts():
     data = request.args

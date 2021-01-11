@@ -48,10 +48,9 @@ export const updateProfile = async(description = "", base64_image = "") =>{
     return response;
   });  
 }
-export const getProfile = async()=>{
-  const user = useContext(AuthContext).user
-  const url = base_url.concat(format('/user/get/?email={0}',{user}))
-  await axios.get(url).then((response)=>{
-    return response;
-  });
+export const getProfile = async(email)=>{
+  const url = base_url.concat(format('/user/get/?email={0}',email))
+  const val = await axios.get(url)
+  console.warn(val["data"])
+  return val["data"]
 }

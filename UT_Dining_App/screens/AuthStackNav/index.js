@@ -5,8 +5,6 @@ import signUp from '../SignUpScreen/index'
 import {AuthContext} from '../../App'
 const Stack = createStackNavigator();
 const AuthStackNav = ()=>{
-    const {setUser} = useContext(AuthContext)
-    setUser("")
     return(
         <Stack.Navigator screenOptions = {{header: () =>null}}>
             <Stack.Screen name="signIn" component = {signIn}/>
