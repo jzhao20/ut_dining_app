@@ -11,6 +11,18 @@ import MealtimeSelectionScreen from '../screens/MealtimeSelectionScreen/index';
 import SignUpScreen from '../screens/SignUpScreen/index';
 import SignInScreen from '../screens/SignInScreen/index';
 import ProfileScreen from '../screens/ProfileScreen/index';
+import EditProfile from '../screens/EditProfile/index';
+
+const ProfileStack = createStackNavigator();
+
+function ProfileStackScreen () {
+    return(
+        <ProfileStack.Navigator screenOptions = {{header: ()=>null}}>
+            <ProfileStack.Screen name = "profile" component = {ProfileScreen}/>
+            <ProfileStack.Screen name = "edit profile" component = {EditProfile}/>
+        </ProfileStack.Navigator>
+    )
+}
 
 const LoginStack = createStackNavigator();
 
@@ -124,7 +136,7 @@ const Tabs = () => {
                 }}
             />
             <Tab.Screen
-                name='Profile' component={ProfileScreen}
+                name='Profile' component={ProfileStackScreen}
                 options={{
                     tabBarVisible: true,
                     tabBarIcon: ({focused}) => (
