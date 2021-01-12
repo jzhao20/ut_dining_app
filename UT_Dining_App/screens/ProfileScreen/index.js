@@ -26,7 +26,6 @@ export default function ProfileScreen ({navigation}){
     const {user} = useContext(AuthContext)
     const {description} = useContext(AuthContext)
     const {image} = useContext(AuthContext)
-    console.warn("Image:"+image)
     const [state, setState] = React.useState(false)
     const [meal_time, setMealTime] = React.useState("")
     const [current_dining_hall, setDiningHall] = React.useState("")
@@ -60,7 +59,7 @@ export default function ProfileScreen ({navigation}){
                             resizeMode: 'cover'
                         }}
                         source={
-                            {uri: image}
+                            {uri: format('data:image/png;base64,{0}',image)}
                         }/>
                     </View>
                 </View>

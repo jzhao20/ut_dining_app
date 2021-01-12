@@ -16,17 +16,19 @@ function editProfileScreen({navigation}){
     const {image} = useContext(AuthContext)
     const {setImage} = useContext(AuthContext)
     const [new_description, set_new_description] = useState("")
-    const [new_image, set_new_image] = useState({image})
+    const [new_image, set_new_image] = useState("")
     const [new_image_display, set_new_image_display] = useState(null);
-    const [display_message, set_message] = useState('')
-    const editHandler = async()=>{
-        setDescription(new_description)
-        setImage(new_image)
-        const val = await(updateProfile(new_description, new_image, user))
-        set_message(val)
-        if(display_message == "updated profile"){
-            navigation.navigate('profile')
+    const [message_state, set_message_state] = useState(false)
+    const [image_state, set_image_state] = useState(false)
+    const editHandler = ()=>{
+        if (message_state){
+            setDescription(new_description)
         }
+        if (image_state){
+            setImage(new_image)
+        }
+        updateProfile(new_description, new_image, user)
+        navigation.navigate('profile')
     }
     const pickImage = async()=>{
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -38,8 +40,12 @@ function editProfileScreen({navigation}){
         });
         if( !result.cancelled){
             set_new_image_display(result.uri)
-            set_new_image(format('data:image/png;base64,{0}',result.base64))
+            set_new_image(result.base64)
+            set_image_state(true)
         }
+    }
+    const description_handler = ()=>{
+        
     }
     useEffect(()=>{
         (async ()=>{
@@ -66,7 +72,11 @@ function editProfileScreen({navigation}){
                 <TextInput
                     placeholder = {description}
                     value = {new_description}
-                    onChangeText = {set_new_description}
+                    onChangeText = {(text)=> {
+                        set_new_description(text)
+                        set_message_state(true)
+                    }
+                }
                     autoCorect = {false}
                     autoCapitalize = "none"
                 />

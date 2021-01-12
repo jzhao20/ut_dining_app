@@ -26,8 +26,8 @@ function SignInScreen({navigation}) {
             setDescription(res["description"])
             const img = format('data:image/png;base64,{0}',res['picture'])
             setImage(img)
+            setMessage(val.toString())
         }
-        setMessage(val.toString())
         navigation.navigate('FrontPage')
     };
 
