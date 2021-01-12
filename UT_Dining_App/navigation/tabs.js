@@ -10,6 +10,7 @@ import MealtimeSelectionScreen from '../screens/MealtimeSelectionScreen/index';
 
 import SignUpScreen from '../screens/SignUpScreen/index';
 import SignInScreen from '../screens/SignInScreen/index';
+import ProfileScreen from '../screens/ProfileScreen/index';
 
 const LoginStack = createStackNavigator();
 
@@ -123,7 +124,7 @@ const Tabs = () => {
                 }}
             />
             <Tab.Screen
-                name='Profile' component={CalendarScreen}
+                name='Profile' component={ProfileScreen}
                 options={{
                     tabBarVisible: true,
                     tabBarIcon: ({focused}) => (

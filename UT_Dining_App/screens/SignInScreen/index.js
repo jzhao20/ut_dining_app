@@ -28,6 +28,7 @@ function SignInScreen({navigation}) {
             setImage(img)
         }
         setMessage(val.toString())
+        navigation.navigate('FrontPage')
     };
 
     return (

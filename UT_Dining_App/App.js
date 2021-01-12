@@ -54,6 +54,8 @@ const AuthContext = React.createContext({
 // }
 
 export default function App() {
+  const Stack = createStackNavigator();
+
   const [user, setUser] = React.useState("");
   const [description, setDescription] = React.useState("")
   const [image, setImage] = React.useState("")
@@ -83,26 +85,21 @@ export default function App() {
     return <AppLoading />
   }
   return (
+    // <AuthContext.Provider value = {{user, setUser, description, setDescription, image, setImage, diningHalls}}>
+    //   <NavigationContainer>{!user ? <AuthStackNav/> : <Home/>}</NavigationContainer>
+    // </AuthContext.Provider>
     <AuthContext.Provider value = {{user, setUser, description, setDescription, image, setImage, diningHalls}}>
-      <NavigationContainer>{!user ? <AuthStackNav/> : <Home/>}</NavigationContainer>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+        initialRouteName='TabScreen'
+      >
+        <Stack.Screen name='TabScreen' component={Tabs}/>
+      </Stack.Navigator>
+    </NavigationContainer>
     </AuthContext.Provider>
-    // <SignInScreen/>
-    // <NavigationContainer>
-    //   <Stack.Navigator
-    //     screenOptions={{
-    //       headerShown: false
-    //     }}
-    //     initialRouteName='TabScreen'
-    //   >
-    //     <Stack.Screen name='TabScreen' component={Tabs}/>
-    //   </Stack.Navigator>
-
-    // {/* <AuthContext.Provider
-    //   value={{ user, setUser, diningHalls}}
-    // >
-    //  {!user ? <Auth /> : <FrontPage />}
-    // </AuthContext.Provider> */}
-    // </NavigationContainer>
   );}
 export {AuthContext};
 
