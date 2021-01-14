@@ -27,8 +27,9 @@ function SignInScreen({navigation}) {
             const img = format('data:image/png;base64,{0}',res['picture'])
             setImage(img)
             setMessage(val.toString())
+            navigation.navigate('FrontPage')
         }
-        navigation.navigate('FrontPage')
+        
     };
 
     return (
@@ -66,7 +67,7 @@ function SignInScreen({navigation}) {
                 </View>
                 
                 <TouchableOpacity>
-                    <Text style={styles.signupText} onPress={() => {navigation.navigate('signUp')}}>
+                    <Text style={styles.signupText} onPress={() => {navigation.navigate('SignUpScreen')}}>
                         Don't have an account?
                     </Text>
                 </TouchableOpacity>

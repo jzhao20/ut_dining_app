@@ -77,7 +77,7 @@ function SignUpScreen({navigation}) {
                 </View>
                 
                 <TouchableOpacity>
-                    <Text style={styles.signupText} onPress={() => navigation.navigate('signIn')}>
+                    <Text style={styles.signupText} onPress={() => navigation.navigate('SignInScreen')}>
                         Already have an account?
                     </Text>
                 </TouchableOpacity>
