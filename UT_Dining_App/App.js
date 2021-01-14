@@ -30,6 +30,7 @@ import ProfileScreen from './screens/ProfileScreen/index';
 import SignUpScreen from './screens/SignUpScreen/index';
 import AuthStackNav from './screens/AuthStackNav/index'
 import Home from './screens/RootDrawerNav';
+import MenuScreen from './screens/MenuScreen/index';
 //const app = useContext(getRealmApp());
 //const dining_hall_collection = app.collection2 
 
@@ -42,16 +43,6 @@ const AuthContext = React.createContext({
   image:"",
   setImage:null
 })
-
-// const HomeStack = createStackNavigator()
-// function HomeStackScreen() {
-//   return (
-//     <HomeStack.Navigator>
-//       <HomeStack.Screen name='Home' component={FrontPage}/>
-//       <HomeStack.Screen name='Search' component={Tabs}/>
-//     </HomeStack.Navigator>
-//   );
-// }
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -67,6 +58,7 @@ export default function App() {
       }
     )
   },[]);
+
   //useEffect(()=>
   //{
     //setDiningHall(dining_hall_collection.find()[0]);
@@ -85,21 +77,22 @@ export default function App() {
     return <AppLoading />
   }
   return (
+    <MenuScreen/>
     // <AuthContext.Provider value = {{user, setUser, description, setDescription, image, setImage, diningHalls}}>
     //   <NavigationContainer>{!user ? <AuthStackNav/> : <Home/>}</NavigationContainer>
     // </AuthContext.Provider>
-    <AuthContext.Provider value = {{user, setUser, description, setDescription, image, setImage, diningHalls}}>
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false
-        }}
-        initialRouteName='TabScreen'
-      >
-        <Stack.Screen name='TabScreen' component={Tabs}/>
-      </Stack.Navigator>
-    </NavigationContainer>
-    </AuthContext.Provider>
+    // <AuthContext.Provider value = {{user, setUser, description, setDescription, image, setImage, diningHalls}}>
+    // <NavigationContainer>
+    //   <Stack.Navigator
+    //     screenOptions={{
+    //       headerShown: false
+    //     }}
+    //     initialRouteName='TabScreen'
+    //   >
+    //     <Stack.Screen name='TabScreen' component={Tabs}/>
+    //   </Stack.Navigator>
+    // </NavigationContainer>
+    // </AuthContext.Provider>
   );}
 export {AuthContext};
 

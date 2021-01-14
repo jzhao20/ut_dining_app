@@ -17,9 +17,21 @@ const ProfileStack = createStackNavigator();
 
 function ProfileStackScreen () {
     return(
-        <ProfileStack.Navigator screenOptions = {{header: ()=>null}}>
-            <ProfileStack.Screen name = "profile" component = {ProfileScreen}/>
-            <ProfileStack.Screen name = "edit profile" component = {EditProfile}/>
+        <ProfileStack.Navigator >
+            <ProfileStack.Screen 
+                name = "profile" 
+                component = {ProfileScreen}
+                options={{
+                    title: ''
+                }}
+            />
+            <ProfileStack.Screen 
+                name = "edit profile" 
+                component = {EditProfile}
+                options={{
+                    title: ''
+                }}
+            />
         </ProfileStack.Navigator>
     )
 }
