@@ -299,10 +299,9 @@ def create_user():
         profile_picture = data["picture"]
     except:
         profile_picture = ""
-    else:
-        #add the stuff to it
-        emails.insert_one({'email':email,"password":password,"description":description,"picture":profile_picture, "nut_facts":[]})
-        return "added profile logging you in"
+    #add the stuff to it
+    emails.insert_one({'email':email,"password":password,"description":description,"picture":profile_picture, "nut_facts":[]})
+    return "added profile logging you in"
 
 @app.route('/image/classify', methods = ['POST'])
 def classify():
