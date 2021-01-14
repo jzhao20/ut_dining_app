@@ -35,8 +35,8 @@ export default function ProfileScreen ({navigation}){
         <SafeAreaView>
             <View style={styles.container}>
                 <View style={styles.profilePicture}>
-                    <ImageBackground
-                        source={require('../../assets/images/Front/longhorn_logo.png')}
+                    <Image
+                        source={{uri: format('data:image/png;base64,{0}',image)}}//require('../../assets/images/Front/longhorn_logo.png')}
                         style={{height: 100, width: 100}}
                         imageStyle={{borderRadius:15}}
                     />

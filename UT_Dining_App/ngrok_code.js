@@ -1,2 +1,2 @@
-const base_url ="https://ba35c48a7a24.ngrok.io";
+const base_url ="https://bd4c517d0abc.ngrok.io/";
 export {base_url};
