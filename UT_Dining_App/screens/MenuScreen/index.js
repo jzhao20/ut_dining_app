@@ -18,7 +18,7 @@ function MenuScreen ({navigation, route}) {
 
     const renderItem = ({ item }) => {
         return (
-            <View style={styles.row}>
+            <View style={styles.rowEntry}>
                 <Text style={styles.foodName}>
                     {item.key}
                 </Text>
@@ -57,6 +57,17 @@ function MenuScreen ({navigation, route}) {
                     data={test}
                     renderItem={renderItem}
                 />
+                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                    <View style={styles.buttonContainer}>
+                        <StyledButton
+                            type='secondary'
+                            content={'Submit changes'}
+                            onPress={() => {
+                                
+                            }}
+                        />
+                    </View>
+                </View>
             </View>
         </SafeAreaView>
     );

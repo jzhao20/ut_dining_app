@@ -8,72 +8,29 @@ const styles = StyleSheet.create({
         // flex: 1,
     },
 
-    profilePicture: {
-        // alignItems: 'center',
-        // paddingHorizontal: 30,
-        alignItems: 'center',
-        // justifyContent: 'center',
-        marginBottom: 40
-    },
-
-    userInfoSection: {
-        alignItems: 'flex-start',
-        paddingHorizontal: 30,
-        marginBottom: 25
-    },
-
     row: {
-        left: 20,
+        // left: 10,
         flexDirection: 'row',
         marginBottom: 10,
+        backgroundColor: '#E05E15'
     },
 
-    iconText: {
-        color:'gray', 
-        marginLeft: 20,
-        marginRight: 20,
-        fontSize: 18,
+    rowEntry: {
+        left: 10,
+        flexDirection: 'row',
+        marginBottom: 5,
+        borderTopWidth: 1,
+        borderColor: '#d3d3d3',
     },
 
-    descriptionBox: {
-        color:'gray', 
-        marginLeft: 20,
-        marginRight: 20,
-        width: '80%',
-        height: '100%',
-        fontSize: 18,
-        borderWidth: 1,
-        borderColor: '#f2f2f2'
-    },
-
-    input: {
-        // backgroundColor: '#5c5e62',
-        // backgroundColor: '#d3d3d3',
-        padding: 8,
-        borderRadius: 10,
-        marginVertical: 5,
-        width: '80%',
-
-        marginLeft: 20,
-        borderBottomWidth: 2,
-        borderBottomColor: '#f2f2f2',
-    },
-
-    passChange: {
-        backgroundColor: '#d3d3d3',
-        padding: 8,
-        borderRadius: 10,
-        marginVertical: 5,
-        width: '80%',
-    },
-
-    buttonContainer : {
+    buttonContainer: {
         width: '70%'
     },
 
     foodName: {
         flex: 4,
-        fontSize: 18
+        fontSize: 18,
+        textAlignVertical: 'center'
     },
 
     foodNameTitle: {
@@ -87,21 +44,24 @@ const styles = StyleSheet.create({
     servingSize: {
         flex: 2,
         fontSize: 18,
+        textAlignVertical: 'center'
     },
 
     servingSizeTitle: {
         fontWeight: 'bold',
-        paddingLeft: 12,
-        paddingRight: 12,
+        paddingLeft: 10,
+        paddingRight: 10,
         flex: 2,
         fontSize: 24,
         borderRightWidth: 1,
         borderLeftWidth: 1,
+        // borderColor: 'white',
         textAlign: 'center'
     },
 
     quantity: {
         marginLeft: 10,
+        marginTop: 5,
         flex: 3,
         fontSize: 18
     },
